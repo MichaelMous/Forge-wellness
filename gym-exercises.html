@@ -1,0 +1,1792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FORGE | Gym & Exercises</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        
+        
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Sora', 'sans-serif'],
+                    },
+                    colors: {
+                        teal: {
+                            50:  '#e6f9ff',
+                            100: '#ccf3ff',
+                            200: '#99e7ff',
+                            300: '#66dbff',
+                            400: '#33d4ff',
+                            500: '#00d2ff',
+                            600: '#00a8cc',
+                            700: '#007e99',
+                            800: '#005466',
+                            900: '#002a33'
+                        }
+                    }
+                }
+            }
+        };
+    </script>
+    <link rel="stylesheet" href="style.css">  
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        
+        html.dark body { background:#070b14; color:#e2e8f0; }
+        
+        body { font-family: 'Inter', sans-serif; }
+        .font-display, h1, h2, h3, h4 { font-family: 'Sora', sans-serif; }
+        html.dark .bg-white { background-color:#0f172a !important; }
+        html.dark .bg-slate-50 { background-color:#111c30 !important; }
+        html.dark .bg-slate-100 { background-color:#1e293b !important; }
+        
+        html.dark .bg-slate-50\/50 { background-color:rgba(17,28,48,0.5) !important; }
+        html.dark .bg-white\/50 { background-color:rgba(15,23,42,0.6) !important; }
+        html.dark .bg-white\/90 { background-color:rgba(15,23,42,0.9) !important; }
+        html.dark nav.bg-white\/90 { border-color:rgba(255,255,255,0.08) !important; }
+        
+        html.dark .text-slate-900 { color:#f1f5f9 !important; }
+        html.dark .text-slate-800 { color:#e2e8f0 !important; }
+        html.dark .text-slate-700 { color:#cbd5e1 !important; }
+        html.dark .text-slate-600 { color:#94a3b8 !important; }
+        html.dark .text-slate-500 { color:#94a3b8 !important; }
+        html.dark .text-slate-400 { color:#64748b !important; }
+        
+        html.dark .border-slate-100 { border-color:rgba(255,255,255,0.08) !important; }
+        html.dark .border-slate-200 { border-color:rgba(255,255,255,0.12) !important; }
+        
+        html.dark .bg-slate-800 { background-color:#05080f !important; }
+        html.dark .bg-slate-900 { background-color:#020409 !important; }
+        
+        
+        html.dark #model-stage { background-color:#e8edf5 !important; }
+        html.dark .flip-card-front,
+        html.dark .flip-card-back { background-color:transparent !important; }
+        html.dark #front-container, html.dark #back-container { background:transparent !important; }
+        html.dark #model-stage .text-slate-400 { color:#64748b !important; }
+        
+        #theme-toggle {
+            width:55px; height:28px; background:#334155; border-radius:50px;
+            position:relative; cursor:pointer; border:none; flex-shrink:0;
+        }
+        #theme-toggle .ball {
+            width:22px; height:22px; background:#fff; border-radius:50%;
+            position:absolute; top:3px; left:3px; display:flex; align-items:center;
+            justify-content:center; font-size:12px;
+            transition:0.4s cubic-bezier(0.68,-0.55,0.265,1.55);
+        }
+        html.dark #theme-toggle .ball { transform:translateX(27px); }
+
+        
+        #vp-modal          { opacity:0; transition:opacity .22s ease; pointer-events:none; }
+        #vp-modal.vp-open  { opacity:1; pointer-events:all; }
+        #vp-card           { transform:scale(.95) translateY(16px); transition:transform .32s cubic-bezier(.16,1,.3,1); }
+        #vp-modal.vp-open #vp-card { transform:scale(1) translateY(0); }
+        #vp-video          { display:block; width:100%; height:100%; object-fit:contain; background:#000; }
+        
+        #vp-lower-third {
+            position:absolute; bottom:0; left:0; right:0;
+            background:linear-gradient(to top,rgba(0,0,0,.92) 0%,rgba(0,0,0,.5) 55%,transparent 100%);
+            padding:52px 20px 18px;
+        }
+        
+        .ex-watch-btn {
+            display:flex; align-items:center; justify-content:center; gap:6px;
+            width:100%; margin-top:12px; padding:10px 0;
+            background:#0f172a; color:#fff; border:none; border-radius:10px;
+            cursor:pointer; font-size:9.5px; font-weight:900;
+            text-transform:uppercase; letter-spacing:.18em;
+            transition:background .18s,transform .12s;
+        }
+        .ex-watch-btn:hover { background:#00d2ff; color:#0f172a; transform:translateY(-1px); }
+        @media print { #vp-modal,#workout-overlay { display:none !important; } }
+
+        
+        #workout-overlay {
+            opacity:0; pointer-events:none;
+            transition: opacity 0.28s ease;
+        }
+        #workout-overlay.wo-open { opacity:1; pointer-events:all; }
+
+        
+        #workout-sheet {
+            transform: translateY(100%);
+            transition: transform 0.42s cubic-bezier(0.16,1,0.3,1);
+        }
+        #workout-overlay.wo-open #workout-sheet { transform: translateY(0); }
+
+        
+        @media (min-width:768px) {
+            #workout-sheet {
+                transform: scale(0.94) translateY(20px);
+                transition: transform 0.36s cubic-bezier(0.16,1,0.3,1);
+            }
+            #workout-overlay.wo-open #workout-sheet { transform: scale(1) translateY(0); }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-slate-100 px-6 md:px-10 py-3 flex justify-between items-center transition-all">
+        <a href="Index.html" class="group flex items-center gap-2 transition-opacity">
+            <h1 class="font-display font-black text-2xl tracking-tighter text-slate-900">FORGE<span class="text-teal-500">.</span></h1>
+        </a>
+        <div class="flex items-center gap-8 md:gap-10">
+            <div class="hidden md:flex items-center gap-6">
+                <div class="relative text-[11px] font-bold uppercase tracking-widest text-slate-900">
+                    Training
+                    <div class="absolute -bottom-2 left-0 w-full h-[2px] bg-teal-500"></div>
+                </div>
+                <a href="Instopt.html" class="text-[11px] font-bold uppercase tracking-widest text-slate-400 hover:text-slate-900 transition-colors">
+                    Nutrition
+                </a>
+            </div>
+            <button id="theme-toggle" onclick="toggleGymTheme()" aria-label="Toggle night mode">
+                <span class="ball" id="theme-toggle-icon">🌙</span>
+            </button>
+        </div>
+    </nav>
+
+
+<section id="intro-hero" class="min-h-[100vh] flex items-center justify-center pt-24 pb-16 px-6 lg:px-12 relative bg-slate-800 overflow-hidden">
+    
+    <div class="absolute inset-0 z-0">
+        <img src="Images/dumbells.jpg" alt="Gym Background" class="w-full h-full object-cover opacity-40 grayscale">
+        <div class="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/80 to-transparent"></div>
+    </div>
+
+    
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full text-center pointer-events-none select-none overflow-hidden flex justify-center items-center opacity-[0.09] z-0">
+        <h1 class="font-display font-black text-[18vw] tracking-tighter leading-none m-0 p-0 text-white">DISCIPLINE</h1>
+    </div>
+
+    <div class="max-w-[75rem] mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-center relative z-10">
+        <div class="lg:col-span-6 flex flex-col justify-center">
+            
+            
+            <h1 class="font-display text-6xl sm:text-7xl lg:text-[6.5rem] font-black text-white leading-[0.85] mb-8 tracking-tighter uppercase">
+                Target.<br><span class="text-teal-500">Build.</span><br>Train.
+            </h1>
+            
+            
+            <p class="text-lg text-slate-300 leading-relaxed max-w-md mb-12 font-medium drop-shadow-md">
+                No more guesswork. No more wasted reps. Select your targets on the interactive 3D map and forge a battle-tested routine instantly.
+            </p>
+            
+            <button onclick="startAppFlow()" class="group flex items-center justify-between bg-white text-slate-900 px-8 py-5 rounded-full text-sm font-black uppercase tracking-widest hover:bg-teal-500 hover:text-white transition-all shadow-2xl hover:shadow-teal-500/40 w-full sm:w-max min-w-[280px]">
+                <span>OPEN BODY MAP</span>
+                <svg class="w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+            </button>
+        </div>
+
+        <div class="lg:col-span-6 flex justify-start lg:justify-center mt-8 lg:mt-0">
+            <div class="w-full max-w-md bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl">
+                
+                <h3 class="font-display text-[24px] font-black text-white uppercase tracking-tight mb-4">The Blueprint</h3>
+                
+                <p class="text-[15px] text-slate-300 font-medium leading-relaxed mb-10">
+                    FORGE strips away the noise, delivering a dynamic, anatomy-driven system built for serious results.
+                </p>
+                
+                <div class="space-y-8">
+                    
+                    <div class="flex items-start gap-5">
+                        <div class="w-10 h-10 shrink-0 rounded-xl  bg-teal-500/20 flex items-center justify-center text-teal-400 border border-teal-500/30">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path></svg>
+                        </div>
+                        <div>
+                            <h5 class="font-bold text-white text-sm uppercase tracking-tight mb-1 ">Precision Targeting</h5>
+                            <p class="text-[13px] text-slate-400 font-medium leading-relaxed">Command every fiber of your body with single-click muscle isolation.</p>
+                        </div>
+                    </div>
+                    
+                    
+                    <div class="flex items-start gap-5">
+                        <div class="w-10 h-10 shrink-0 rounded-xl bg-teal-500/20 flex items-center justify-center text-teal-400 border border-teal-500/30">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        </div>
+                        <div>
+                            <h5 class="font-bold text-white text-sm uppercase tracking-tight mb-1">Optimized Execution</h5>
+                            <p class="text-[13px] text-slate-400 font-medium leading-relaxed">Scientifically calibrated sets, reps, and tempos for maximum growth.</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="w-full bg-white pt-24 pb-32 relative z-20">
+    <div class="max-w-[75rem] mx-auto px-6 md:px-10">
+
+        
+        <div class="mb-12 flex flex-col items-start gap-4 border-b border-slate-100 pb-8">
+            <div class="flex items-center gap-2.5 bg-slate-900 px-4 py-2.5 rounded-xl shadow-lg shadow-slate-900/10">
+    
+    <svg class="w-3.5 h-3.5 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+    </svg>
+    <span class="text-[10px] font-black uppercase tracking-widest text-white">Health Facts</span>
+</div>
+            <h2 class="font-display text-5xl md:text-5xl font-black text-slate-900 tracking-tighter">
+                FIND YOUR REASON
+            </h2>
+        </div>
+
+        
+        <div class="relative w-full h-[400px] md:h-[500px] rounded-[2.5rem] mt-4">
+
+            
+            <div id="ed-slide-1" class="absolute inset-0 transition-all duration-1000 opacity-100 z-10">
+                <img src="Images/bar.jpg" alt="Gym" class="w-full h-full object-cover rounded-[2.5rem] shadow-lg">
+                <div class="slide-card absolute -bottom-12 left-6 right-6 md:left-12 md:right-auto md:w-[450px] bg-white p-8 md:p-10 rounded-[2rem] shadow-2xl border border-slate-100 transition-all duration-1000 translate-y-0 opacity-100">
+                    <p class="text-[10px] font-black text-teal-500 uppercase tracking-[0.2em] mb-2">Real Strength</p>
+                    <h3 class="font-display text-2xl font-black text-slate-900 mb-3 tracking-tight">Build Real Strength</h3>
+                    <p class="text-sm text-slate-600 font-medium leading-relaxed">
+                        Lifting weights does more than just build muscle—it makes everyday life easier. Whether you're carrying groceries or playing with your kids, getting stronger gives you a level of energy and confidence you never knew you had.
+                    </p>
+                </div>
+            </div>
+
+            
+            <div id="ed-slide-2" class="absolute inset-0 transition-all duration-1000 opacity-0 z-0 pointer-events-none">
+                <img src="Images/trx.jpg" alt="Weights" class="w-full h-full object-cover rounded-[2.5rem] shadow-lg">
+                <div class="slide-card absolute -bottom-12 left-6 right-6 md:left-12 md:right-auto md:w-[450px] bg-white p-8 md:p-10 rounded-[2rem] shadow-2xl border border-slate-100 transition-all duration-1000 translate-y-8 opacity-0">
+                    <p class="text-[10px] font-black text-teal-500 uppercase tracking-[0.2em] mb-2">Shape & Tone</p>
+                    <h3 class="font-display text-2xl font-black text-slate-900 mb-3 tracking-tight">Shape Your Physique</h3>
+                    <p class="text-sm text-slate-600 font-medium leading-relaxed">
+                        You have the power to sculpt your own body. By targeting specific muscle groups, you can build a leaner, more defined frame that makes you feel proud and empowered every time you look in the mirror.
+                    </p>
+                </div>
+            </div>
+
+            
+            <div id="ed-slide-3" class="absolute inset-0 transition-all duration-1000 opacity-0 z-0 pointer-events-none">
+                <img src="Images/girls.jpg" alt="Grip" class="w-full h-full object-cover rounded-[2.5rem] shadow-lg">
+                <div class="slide-card absolute -bottom-12 left-6 right-6 md:left-12 md:right-auto md:w-[450px] bg-white p-8 md:p-10 rounded-[2rem] shadow-2xl border border-slate-100 transition-all duration-1000 translate-y-8 opacity-0">
+                    <p class="text-[10px] font-black text-teal-500 uppercase tracking-[0.2em] mb-2">Vitality</p>
+                    <h3 class="font-display text-2xl font-black text-slate-900 mb-3 tracking-tight">Feel Years Younger</h3>
+                    <p class="text-sm text-slate-600 font-medium leading-relaxed">
+                        Strength training is the closest thing we have to a fountain of youth. It boosts your metabolism, protects your joints, and naturally increases your daily vitality so you feel completely unstoppable.
+                    </p>
+                </div>
+            </div>
+
+            
+            <div id="ed-slide-4" class="absolute inset-0 transition-all duration-1000 opacity-0 z-0 pointer-events-none">
+                <img src="Images/yoga.jpg" alt="Focus" class="w-full h-full object-cover rounded-[2.5rem] shadow-lg">
+                <div class="slide-card absolute -bottom-12 left-6 right-6 md:left-12 md:right-auto md:w-[450px] bg-white p-8 md:p-10 rounded-[2rem] shadow-2xl border border-slate-100 transition-all duration-1000 translate-y-8 opacity-0">
+                    <p class="text-[10px] font-black text-teal-500 uppercase tracking-[0.2em] mb-2">Mental Clarity</p>
+                    <h3 class="font-display text-2xl font-black text-slate-900 mb-3 tracking-tight">Elevate Your Mind</h3>
+                    <p class="text-sm text-slate-600 font-medium leading-relaxed">
+                        Exercise isn't just for your muscles—it's medicine for your brain. Pushing your physical limits releases endorphins that literally melt away stress, leaving you with razor-sharp mental focus for the rest of your day.
+                    </p>
+                </div>
+            </div>
+
+            
+            <div id="ed-slide-5" class="absolute inset-0 transition-all duration-1000 opacity-0 z-0 pointer-events-none">
+                <img src="Images/medidate.jpg" alt="Recovery" class="w-full h-full object-cover rounded-[2.5rem] shadow-lg">
+                <div class="slide-card absolute -bottom-12 left-6 right-6 md:left-12 md:right-auto md:w-[450px] bg-white p-8 md:p-10 rounded-[2rem] shadow-2xl border border-slate-100 transition-all duration-1000 translate-y-8 opacity-0">
+                    <p class="text-[10px] font-black text-teal-500 uppercase tracking-[0.2em] mb-2">Deep Recovery</p>
+                    <h3 class="font-display text-2xl font-black text-slate-900 mb-3 tracking-tight">Master Your Sleep</h3>
+                    <p class="text-sm text-slate-600 font-medium leading-relaxed">
+                        Nothing upgrades your sleep quality quite like a hard workout. Training tires your central nervous system in the best way possible, helping you fall asleep faster and wake up feeling completely recharged.
+                    </p>
+                </div>
+            </div>
+
+            
+            <div id="ed-slide-6" class="absolute inset-0 transition-all duration-1000 opacity-0 z-0 pointer-events-none">
+                <img src="Images/pers-dum.jpg" alt="Armor" class="w-full h-full object-cover rounded-[2.5rem] shadow-lg">
+                <div class="slide-card absolute -bottom-12 left-6 right-6 md:left-12 md:right-auto md:w-[450px] bg-white p-8 md:p-10 rounded-[2rem] shadow-2xl border border-slate-100 transition-all duration-1000 translate-y-8 opacity-0">
+                    <p class="text-[10px] font-black text-teal-500 uppercase tracking-[0.2em] mb-2">Armor Your Body</p>
+                    <h3 class="font-display text-2xl font-black text-slate-900 mb-3 tracking-tight">Build Unbreakable Bones</h3>
+                    <p class="text-sm text-slate-600 font-medium leading-relaxed">
+                        Lifting heavy doesn't just build muscle; it literally increases your bone density. You are actively building an internal armor that protects you from injury and keeps your body resilient for decades to come.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<div id="onboarding-modal" class="fixed inset-0 z-[100] bg-slate-900/90 backdrop-blur-xl flex items-center justify-center transition-opacity duration-500" style="display: none; opacity: 0;">        
+    <div class="bg-white rounded-3xl p-8 max-w-md w-full mx-4 shadow-2xl border border-slate-100 max-h-[90vh] overflow-y-auto">
+        
+        <div class="mb-8">
+            <div class="text-center mb-6">
+                <h1 class="font-display text-3xl font-black text-slate-900 tracking-tighter">FORGE<span class="text-teal-500">.</span></h1>
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.3em] mt-2">How it works</p>
+            </div>
+            
+            <div class="flex flex-col gap-4 bg-slate-50 p-6 rounded-xl border border-slate-200">
+                <div class="flex items-center gap-4">
+                    <div class="w-8 h-8 shrink-0 rounded-full bg-white border border-slate-200 text-slate-900 flex items-center justify-center font-black text-sm shadow-sm">1</div>
+                    <p class="text-xs text-slate-700 font-bold uppercase tracking-tight">Enter your details below.</p>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="w-8 h-8 shrink-0 rounded-full bg-white border border-slate-200 text-slate-900 flex items-center justify-center font-black text-sm shadow-sm">2</div>
+                    <p class="text-xs text-slate-700 font-bold uppercase tracking-tight">Tap muscles on the 3D map.</p>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="w-8 h-8 shrink-0 rounded-full bg-white border border-slate-200 text-slate-900 flex items-center justify-center font-black text-sm shadow-sm">3</div>
+                    <p class="text-xs text-slate-700 font-bold uppercase tracking-tight">Get your custom workout.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="space-y-5">
+            <div class="grid grid-cols-2 gap-4">
+                <div class="space-y-1.5">
+                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Height (CM)</label>
+                    <input type="number" id="user-height" placeholder="180" class="w-full bg-slate-50 border-2 border-slate-100 rounded-xl px-4 py-3 text-sm font-bold text-slate-900 outline-none focus:border-teal-500 transition-all">
+                </div>
+                <div class="space-y-1.5">
+                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Weight (KG)</label>
+                    <input type="number" id="user-weight" placeholder="80" class="w-full bg-slate-50 border-2 border-slate-100 rounded-xl px-4 py-3 text-sm font-bold text-slate-900 outline-none focus:border-teal-500 transition-all">
+                </div>
+            </div>
+
+            <div class="space-y-1.5">
+                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Biological Sex</label>
+                <select id="user-gender" class="w-full bg-slate-50 border-2 border-slate-100 rounded-xl px-4 py-3 text-sm font-bold text-slate-900 outline-none focus:border-teal-500 transition-all cursor-pointer appearance-none">
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                </select>
+            </div>
+
+            <div class="space-y-1.5">
+                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Primary Objective</label>
+                <select id="user-goal" class="w-full bg-slate-50 border-2 border-slate-100 rounded-xl px-4 py-3 text-sm font-bold text-slate-900 outline-none focus:border-teal-500 transition-all cursor-pointer appearance-none">
+                    <option value="build">Build Muscle (Mass)</option>
+                    <option value="burn">Burn Fat (Shred)</option>
+                    <option value="strength">Gain Strength (Power)</option>
+                </select>
+            </div>
+
+            <button onclick="saveProfile()" class="w-full bg-slate-900 hover:bg-teal-500 text-white text-[11px] font-black uppercase tracking-widest py-5 rounded-2xl transition-all transform active:scale-[0.98] mt-2 shadow-lg shadow-teal-500/10">
+                Save & Enter Map ➔
+            </button>
+        </div>
+    </div>
+</div>
+
+
+    <main class="pt-28 pb-12 px-4 md:px-8 max-w-[100rem] mx-auto w-full flex-1 flex flex-col">
+        
+        
+        <div id="lab-view" class="flex flex-col lg:flex-row bg-white rounded-[2.5rem] shadow-[0_20px_80px_-15px_rgba(0,0,0,0.1)] border border-slate-200 overflow-hidden h-[85vh] min-h-[700px] w-full">
+            
+            
+            <div class="w-full lg:w-[320px] xl:w-[360px] shrink-0 border-b lg:border-b-0 lg:border-r border-slate-100 bg-slate-50/50 p-6 md:p-8 flex flex-col gap-8">
+            
+                <div class="bg-slate-900 rounded-2xl p-6 shadow-xl relative overflow-hidden transform-gpu isolate">
+                    
+                    <div class="absolute -top-10 -right-10 w-24 h-24 bg-teal-500/20 blur-2xl rounded-full -z-10"></div>
+                    
+                    <div class="flex justify-between items-center mb-6 relative z-10">
+                        <p class="text-[10px] text-teal-400 uppercase tracking-[0.2em] font-black">Active Profile</p>
+                        
+                        
+                        <button onclick="resetProfile()" class="text-[9px] font-black text-slate-400 hover:text-white uppercase tracking-widest transition-colors flex items-center gap-1.5 group bg-white/5 border border-white/10 px-3 py-1.5 rounded-full" title="Recalibrate">
+                            <svg class="w-3 h-3 group-hover:-rotate-180 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                            Re-Calibrate
+                        </button>
+                    </div>
+                    
+                    <div id="stat-display" class="flex flex-col gap-2 relative z-10 text-white">
+                        <span class="text-sm text-slate-400 font-medium">Awaiting Calibration...</span>
+                    </div>
+                </div>
+                
+
+                
+                <div class="flex-1 flex flex-col justify-end gap-3">
+                    <p class="text-[10px] text-slate-400 uppercase tracking-widest font-black mb-1 ml-2">Map Controls</p>
+                    <button onclick="toggleRotation()" class="w-full bg-white text-slate-700 border border-slate-200 px-6 py-4 rounded-xl text-xs font-black uppercase tracking-[0.2em] hover:bg-slate-100 hover:border-slate-300 transition-all flex items-center justify-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                        Rotate 180°
+                    </button>
+                    
+                    <button onclick="finalizeProtocol()" class="w-full mt-2 bg-teal-500 text-white px-6 py-4 rounded-xl text-xs font-black uppercase tracking-[0.2em] hover:bg-slate-900 transition-all shadow-lg shadow-teal-500/20">
+                        Generate Workout ➔
+                    </button>
+                </div>
+            </div>
+            
+
+            
+            <div id="model-stage" class="flex-1 relative flex items-center justify-center min-h-[50vh] lg:min-h-0 bg-white overflow-hidden">
+                <div class="absolute inset-0 z-0 opacity-[0.03] pointer-events-none" style="background-image: radial-gradient(circle at center, #0f172a 1px, transparent 1px); background-size: 30px 30px;"></div>
+                <div class="absolute bottom-1/4 left-1/2 -translate-x-1/2 w-[300px] h-[40px] bg-teal-500/5 rounded-[100%] blur-md pointer-events-none z-0"></div>
+
+                <div class="flip-card relative z-10" id="mainCard">
+                    <div class="flip-card-inner">
+                        <div id="front-container" class="flip-card-front flex items-center justify-center">
+                            <p class="text-slate-400 font-bold animate-pulse">Loading Biometrics...</p>
+                        </div>
+                        <div id="back-container" class="flip-card-back flex items-center justify-center"></div>
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="w-full lg:w-[360px] xl:w-[420px] shrink-0 border-t lg:border-t-0 lg:border-l border-slate-100 bg-slate-50/50 flex flex-col h-full">
+                
+            
+           
+<div class="p-6 md:p-8 border-b border-slate-100 bg-white/50 z-1000 shrink-0">
+    <div class="flex justify-between items-center mb-3">
+        
+        
+        <div class="flex items-center gap-4">
+            <h3 class="font-display text-2xl font-black text-slate-900 uppercase tracking-tight">WORKOUT</h3>
+            
+            
+<button id="clear-map-btn" style="display: none;" onclick="clearSelection(); this.blur()" class="text-[9px] font-black text-slate-400 hover:text-red-500 uppercase tracking-widest transition-colors flex items-center gap-1 mt-1">                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                Clear Map
+            </button>
+        </div>
+
+        <span id="muscle-counter" class="text-[10px] font-black bg-slate-900 text-white px-3 py-1.5 rounded-full shadow-md">0 Exercises</span>
+    </div>
+
+    
+    <div class="flex items-start gap-2">
+        <span id="target-dot" class="hidden w-1.5 h-1.5 rounded-full bg-teal-500 animate-pulse shrink-0 mt-[5px]"></span>
+        <p id="target-names" class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 min-h-[16px] leading-relaxed break-words">AWAITING SELECTION</p>
+    </div>
+</div>
+                
+
+<div class="p-6 md:p-8 overflow-y-auto flex-1 space-y-4 focus:outline-none" id="exercise-list">                    
+                    <div id="empty-state" class="h-full flex flex-col items-center justify-center text-center py-8">
+    <div class="w-16 h-16 rounded-full bg-teal-50 flex items-center justify-center mb-4 text-teal-500">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path></svg>
+    </div>
+    <p class="text-sm font-bold text-slate-700 px-4">Tap a muscle on the 3D map to start building your custom routine.</p>
+    
+    <div class="mt-8 border-t border-slate-100 pt-6 w-full px-6">
+        <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-4">Not sure where to begin?</p>
+     <div class="flex flex-col gap-2.5">
+    <button onclick="applyTemplate('push'); this.blur()" class="w-full py-3.5 bg-slate-50 border border-slate-200 text-slate-700 rounded-xl text-[10px] font-black uppercase tracking-widest hover:border-teal-500 hover:text-teal-600 transition-all">Start Push Day</button>
+    <button onclick="applyTemplate('pull'); this.blur()" class="w-full py-3.5 bg-slate-50 border border-slate-200 text-slate-700 rounded-xl text-[10px] font-black uppercase tracking-widest hover:border-teal-500 hover:text-teal-600 transition-all">Start Pull Day</button>
+    <button onclick="applyTemplate('legs'); this.blur()" class="w-full py-3.5 bg-slate-50 border border-slate-200 text-slate-700 rounded-xl text-[10px] font-black uppercase tracking-widest hover:border-teal-500 hover:text-teal-600 transition-all">Start Leg Day</button>
+</div>
+    </div>
+</div>
+                </div>
+            </div>
+        </div>
+
+        </div>
+    </main>
+
+    
+    <div id="workout-overlay"
+         class="fixed inset-0 z-[300] flex items-end md:items-center justify-center md:p-6"
+         onclick="if(event.target===this)woClose()">
+
+        
+        <div class="absolute inset-0 bg-slate-950/70 backdrop-blur-sm"></div>
+
+        
+        <div id="workout-sheet"
+             class="relative z-10 w-full md:max-w-4xl bg-white
+                    rounded-t-3xl md:rounded-3xl shadow-[0_-8px_40px_rgba(0,0,0,.25)]
+                    flex flex-col" style="max-height:92vh">
+
+            
+            <div class="md:hidden flex justify-center pt-3 pb-1 flex-shrink-0">
+                <div class="w-10 h-1 bg-slate-200 rounded-full"></div>
+            </div>
+
+            
+            <div class="flex-shrink-0 flex flex-col sm:flex-row sm:items-center
+                        justify-between gap-3 px-6 pt-4 pb-5 border-b border-slate-100">
+                <div>
+                    <p class="text-teal-500 font-black uppercase tracking-[.3em] text-[9px] mb-1">YOUR WORKOUT</p>
+                    <h2 class="font-display text-3xl font-black text-slate-900 tracking-tighter uppercase">Today's Program</h2>
+                </div>
+                <div class="flex items-center gap-2 flex-shrink-0">
+                    <button onclick="vpWatchAll()"
+                            class="flex items-center gap-2 bg-teal-500 text-slate-900
+                                   px-4 py-2.5 rounded-xl text-[9.5px] font-black uppercase tracking-widest
+                                   hover:bg-teal-400 transition-colors shadow-md">
+                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                        Watch All
+                    </button>
+                    <button onclick="woClose()"
+                            class="w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200
+                                   flex items-center justify-center text-slate-500 transition-colors">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            
+            <div class="flex-1 overflow-y-auto px-6 py-5">
+                <div id="final-exercises-list" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+            </div>
+
+        </div>
+    </div>
+    
+
+    
+   
+   
+    <section class="relative w-full mt-20 border-t border-slate-900 overflow-hidden bg-black">
+        
+        
+        <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover z-0 scale-105 pointer-events-none">
+            <source src="video/1 (4).mp4" type="video/mp4">
+        </video>
+
+        
+        <div class="absolute inset-0 bg-slate-900/30 z-10 pointer-events-none"></div>
+        
+        
+        <div class="relative z-20 max-w-[75rem] mx-auto px-6 md:px-10 py-32 md:py-48 flex flex-col items-center text-center">
+            
+            
+            <h2 class="font-display text-5xl md:text-7xl font-black text-white tracking-tighter uppercase mb-6 leading-[0.9]">
+                The Body Achieves <br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-teal-600">What The Mind Believes.</span>
+            </h2>
+
+            
+            <p class="text-base md:text-lg text-white font-medium max-w-2xl mx-auto mb-10 leading-relaxed drop-shadow-lg">
+                You've built the ultimate workout routine, now give your body the premium fuel it deserves. Take your transformation to the next level by pairing your training with our expert nutrition plans.
+            </p>
+
+            
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto px-4 sm:px-0">
+                
+                
+                <a href="Instopt.html" class="group w-full sm:w-auto relative px-10 py-5 bg-teal-500 text-white rounded-xl font-black uppercase tracking-[0.2em] text-[11px] hover:bg-white hover:text-slate-900 transition-colors shadow-[0_0_30px_-5px_rgba(20,184,166,0.4)] text-center">
+                    Explore Meal Plans ➔
+                </a>
+
+            </div>
+            
+        </div>
+    </section>
+  <footer class="w-full py-8 border-t border-slate-200 mt-9 relative top-40">
+        <div class="text-center">
+            <h2 class="font-display text-lg font-black text-slate-900 tracking-tighter mb-1">FORGE<span class="text-teal-500">.</span></h2>
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">Intelligent Training System</p>
+            <p class="text-xs text-slate-400 font-medium">&copy; 2026 FORGE. All rights reserved.</p>
+        </div>
+    </footer>
+
+    
+<div id="anatomy-tooltip" class="fixed pointer-events-none z-[150] bg-slate-900/95 border border-slate-700/50 p-4 rounded-2xl shadow-2xl transition-opacity duration-200 opacity-0 hidden max-w-[240px] backdrop-blur-md">
+    <div class="flex items-center gap-1.5 mb-1.5">
+        <span class="w-1.5 h-1.5 rounded-full bg-teal-500"></span>
+        <p class="text-[9px] font-black text-teal-400 uppercase tracking-[0.2em]" id="tooltip-title">MUSCLE</p>
+    </div>
+    <p class="text-[11.7px] text-slate-300 font-medium leading-relaxed" id="tooltip-fact">Fact goes here.</p>
+</div>
+
+
+
+</body>
+</html>
+
+
+
+    <script>
+        
+
+        
+
+const anatomyFacts = {
+    "glutes": "The largest and heaviest muscle in the human body.",
+    "calves": "Acts as a biological 'second heart,' pumping blood upwards.",
+    "lats": "The broadest back muscle, essential for all heavy pulling.",
+    "chest": "A massive fan-shaped muscle built for pressing power.",
+    "quads": "Four distinct muscles acting as your body's primary shock absorbers.",
+    "hamstrings": "Crosses both hip and knee joints; highly prone to tightness.",
+    "front-shoulders": "The primary driver in overhead pushing and pressing.",
+    "rear-shoulders": "Crucial to train to prevent forward-rolled posture.",
+    "shoulders": "The body's most mobile, yet least stable, joint.",
+    "triceps": "Makes up 60% of your arm mass. Key to arm size.",
+    "biceps": "Controls forearm rotation (supination), not just elbow flexion.",
+    "abdominals": "A single continuous core muscle, not individual blocks.",
+    "obliques": "Your biological corset. Built for rotating and stabilizing.",
+    "lowerback": "Spinal armor that keeps your entire structure rigid.",
+    "traps": "A massive diamond-shaped muscle spanning from skull to mid-back.",
+    "forearms": "Contains over 20 micro-muscles for ultimate grip control.",
+    "hands": "Grip strength is a scientifically proven biomarker for longevity."
+};
+
+
+
+
+
+
+function handleTooltipMove(e) {
+    const clickedElement = e.target;
+    
+    
+    let elementId = clickedElement.id || "";
+    let elementClass = typeof clickedElement.className === 'string' ? clickedElement.className : (clickedElement.className?.baseVal || "");
+    const parentGroup = clickedElement.closest('g');
+    let parentId = parentGroup ? parentGroup.id : "";
+    let parentClass = parentGroup ? (typeof parentGroup.className === 'string' ? parentGroup.className : (parentGroup.className?.baseVal || "")) : "";
+
+    const combinedData = `${elementId} ${elementClass} ${parentId} ${parentClass}`.trim();
+    if (!combinedData) return hideTooltip();
+
+    const groupName = getMajorGroup(combinedData);
+    
+    
+    if (groupName !== 'unknown' && anatomyFacts[groupName]) {
+        const tooltip = document.getElementById('anatomy-tooltip');
+        document.getElementById('tooltip-title').innerText = groupName;
+        document.getElementById('tooltip-fact').innerText = anatomyFacts[groupName];
+
+        
+        tooltip.style.left = (e.clientX + 15) + 'px';
+        tooltip.style.top = (e.clientY + 15) + 'px';
+        
+        tooltip.classList.remove('hidden');
+        tooltip.classList.remove('opacity-0');
+    } else {
+        hideTooltip();
+    }
+}
+
+function hideTooltip() {
+    const tooltip = document.getElementById('anatomy-tooltip');
+    if(tooltip) {
+        tooltip.classList.add('opacity-0');
+        tooltip.classList.add('hidden');
+    }
+}
+
+        
+        document.addEventListener("DOMContentLoaded", function() {
+        let currentSlide = 1;
+        const totalSlides = 6;
+        const duration = 6600; 
+
+        setInterval(function() {
+            
+            for(let i = 1; i <= totalSlides; i++) {
+                const slide = document.getElementById('ed-slide-' + i);
+                const card = slide.querySelector('.slide-card');
+                
+                slide.classList.remove('opacity-100', 'z-10');
+                slide.classList.add('opacity-0', 'z-0', 'pointer-events-none');
+                
+                card.classList.remove('translate-y-0', 'opacity-100');
+                card.classList.add('translate-y-8', 'opacity-0');
+            }
+
+            
+            currentSlide = currentSlide >= totalSlides ? 1 : currentSlide + 1;
+
+            
+            const activeSlide = document.getElementById('ed-slide-' + currentSlide);
+            const activeCard = activeSlide.querySelector('.slide-card');
+            
+            activeSlide.classList.remove('opacity-0', 'z-0', 'pointer-events-none');
+            activeSlide.classList.add('opacity-100', 'z-10');
+            
+            
+            setTimeout(() => {
+                activeCard.classList.remove('translate-y-8', 'opacity-0');
+                activeCard.classList.add('translate-y-0', 'opacity-100');
+            }, 300);
+
+        }, duration);
+    });
+    
+
+        
+function clearSelection() {
+    
+    chosenExercises = [];
+    selectedMuscleGroups.clear();
+
+    
+    const mapShapes = document.querySelectorAll('#front-container svg path, #front-container svg polygon, #front-container svg rect, #back-container svg path, #back-container svg polygon, #back-container svg rect');
+    mapShapes.forEach(shape => shape.style.fill = "");
+
+    
+    const targetNamesEl = document.getElementById('target-names');
+    targetNamesEl.innerText = "AWAITING SELECTION";
+    targetNamesEl.classList.replace('text-teal-600', 'text-slate-400');
+    document.getElementById('target-dot').classList.add('hidden');
+    document.getElementById('muscle-counter').innerText = "0 Exercises";
+
+    
+    renderExerciseList();
+}
+        
+function finalizeProtocol() {
+    if (chosenExercises.length === 0) {
+        alert("Please select at least one muscle group or Quick-Override template first!");
+        return;
+    }
+
+    
+    const finalContainer = document.getElementById('final-exercises-list');
+    finalContainer.innerHTML = '';
+    
+    
+    chosenExercises.forEach((ex, index) => {
+        finalContainer.innerHTML += `
+            <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+                <!-- coloured top bar by muscle -->
+                <div class="h-1 w-full bg-teal-500"></div>
+                <div class="p-5">
+                    <div class="flex justify-between items-start gap-3 mb-4">
+                        <div>
+                            <p class="text-[9px] font-black text-teal-500 uppercase tracking-[.2em] mb-1">${ex.muscle}</p>
+                            <h3 class="font-display font-black text-slate-900 text-xl uppercase tracking-tight leading-tight">${ex.name}</h3>
+                        </div>
+                        <div class="text-right shrink-0">
+                            <p class="text-sm font-black text-slate-900">${ex.protocol}</p>
+                            <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">${ex.rest}</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-2 mb-4">
+                        <span class="text-[9px] font-black bg-slate-50 border border-slate-200 px-2.5 py-1.5 rounded-lg text-slate-500">Tempo: ${ex.tempo}</span>
+                        <span class="text-[9px] font-black bg-slate-50 border border-slate-200 px-2.5 py-1.5 rounded-lg text-slate-500">Load: ${ex.load}</span>
+                    </div>
+                    <button class="ex-watch-btn" onclick="vpOpen(${index})">
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                        Watch Form
+                    </button>
+                </div>
+            </div>
+        `;
+    });
+
+    
+    woOpen();
+}
+
+
+let _vpAllMode  = false;
+let _vpAllIndex = 0;
+
+function vpWatchAll() {
+    if (chosenExercises.length === 0) return;
+    _vpAllMode  = true;
+    _vpAllIndex = 0;
+    _vpOpenForAll(_vpAllIndex);
+}
+
+function _vpOpenForAll(i) {
+    const ex  = chosenExercises[i];
+    if (!ex) { vpClose(); return; }
+
+    const src = vpGetSrc(ex.name);
+    document.getElementById('vp-title').textContent    = ex.name;
+    document.getElementById('vp-muscle').textContent   = ex.muscle;
+    document.getElementById('vp-protocol').textContent = ex.protocol;
+    document.getElementById('vp-rest').textContent     = ex.rest + ' REST';
+    document.getElementById('vp-tempo').textContent    = ex.tempo;
+    document.getElementById('vp-load').textContent     = ex.load;
+
+    const vid     = document.getElementById('vp-video');
+    const missing = document.getElementById('vp-missing');
+    const nav     = document.getElementById('vp-nav');
+    const counter = document.getElementById('vp-counter');
+
+    if (nav)     nav.classList.remove('hidden');
+    if (counter) counter.textContent = `${i + 1} / ${chosenExercises.length}`;
+
+    
+    vid.onended = null;
+
+    if (src) {
+        vid.loop = false;
+        vid.src  = src;
+        vid.classList.remove('hidden');
+        missing.classList.add('hidden');
+        vid.play().catch(() => {});
+        vid.onended = () => {
+            _vpAllIndex++;
+            if (_vpAllIndex < chosenExercises.length) {
+                _vpOpenForAll(_vpAllIndex);
+            } else {
+                vpClose(); 
+            }
+        };
+    } else {
+        
+        vid.removeAttribute('src'); vid.load();
+        vid.classList.add('hidden');
+        missing.classList.remove('hidden');
+        setTimeout(() => {
+            _vpAllIndex++;
+            if (_vpAllIndex < chosenExercises.length) _vpOpenForAll(_vpAllIndex);
+            else vpClose();
+        }, 1500);
+    }
+
+    const modal = document.getElementById('vp-modal');
+    if (modal.classList.contains('hidden')) {
+        modal.classList.remove('hidden');
+        requestAnimationFrame(() => modal.classList.add('vp-open'));
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function vpNavPrev() {
+    if (!_vpAllMode) return;
+    _vpAllIndex = Math.max(0, _vpAllIndex - 1);
+    _vpOpenForAll(_vpAllIndex);
+}
+
+function vpNavNext() {
+    if (!_vpAllMode) return;
+    _vpAllIndex = Math.min(chosenExercises.length - 1, _vpAllIndex + 1);
+    _vpOpenForAll(_vpAllIndex);
+}
+        
+function applyTemplate(type) {
+    
+    if (!localStorage.getItem('orbit_weight') || !localStorage.getItem('orbit_height')) {
+        const modal = document.getElementById('onboarding-modal');
+        modal.style.display = 'flex';
+        void modal.offsetWidth;
+        modal.style.opacity = '1';
+        return;
+    }
+
+    
+    selectedMuscleGroups.clear();
+    chosenExercises = [];
+    const mapShapes = document.querySelectorAll('#front-container svg path, #front-container svg polygon, #front-container svg rect, #back-container svg path, #back-container svg polygon, #back-container svg rect');
+    mapShapes.forEach(shape => shape.style.fill = "");
+
+    
+    const templates = {
+        'push': ['chest', 'front-shoulders', 'triceps'],
+        'pull': ['lats', 'lowerback', 'rear-shoulders', 'biceps', 'traps'],
+        'legs': ['quads', 'hamstrings', 'glutes', 'calves'],
+        'core': ['abdominals', 'obliques']
+    };
+    
+    const targetMuscles = templates[type];
+
+    
+    mapShapes.forEach(shape => {
+        let sId = shape.id || "";
+        let sClass = typeof shape.className === 'string' ? shape.className : (shape.className?.baseVal || "");
+        let pGroup = shape.closest('g');
+        let pId = pGroup ? pGroup.id : "";
+        let pClass = pGroup ? (typeof pGroup.className === 'string' ? pGroup.className : (pGroup.className?.baseVal || "")) : "";
+        
+        let shapeData = `${sId} ${sClass} ${pId} ${pClass}`.trim();
+        let groupName = getMajorGroup(shapeData);
+        
+        if (targetMuscles.includes(groupName)) {
+            shape.style.fill = "#ff0000c2";
+        }
+    });
+
+    
+    targetMuscles.forEach(muscle => {
+        handleMuscleSelection(muscle);
+    });
+}
+   
+
+
+
+function goToCalibration() {
+    document.getElementById('modal-step-1').classList.add('hidden');
+    document.getElementById('modal-step-2').classList.remove('hidden');
+}
+
+
+function goToBriefing() {
+    document.getElementById('modal-step-2').classList.add('hidden');
+    document.getElementById('modal-step-1').classList.remove('hidden');
+}
+
+
+
+        let chosenExercises = []; 
+        let selectedMuscleGroups = new Set(); 
+        let isFlipped = false;
+const maleExerciseDB = {
+    "chest": ["Decline Bench Press", "Bench Press", "Incline Bench Press", "Close Grip Bench Press", "Push Up", "Spiderman Push Up", "Neutral Grip Bench Press", "Incline Fly", "Cable Fly"],
+    "lats": ["Deadlift to Row", "Seated Row", "SA Bent Over Row", "Kneeling Row", "Bent Over Row (SC)", "Prone Lat Pullover", "Lawnmower SA Row"],
+    "lowerback": ["Trap Bar Deadlift", "Good Morning", "Stiff Leg Deadlift", "Snatch Grip Deadlift", "Bird Dog"],
+    "traps": ["Bent Over Row - Wide Grip","Upright Row", "Shrug", "Bent Over Crossover Upright Row", "Crossover Rear Delt Fly (Chest supported)"],
+    "quads": ["Goblet Squat", "Lying Leg Extension", "Front Squat", "Cossack Squat", "Front Rack Reverse Lunge", "Squat & Press", "Bulgarian Split Squat"],
+    "glutes": ["Feet Raised Glute Bridge", "Zercher Lunge", "Alternating Reverse Lunge", "Bulgarian Split Squats", "Hip Thrust", "SL Hip Thrust"],
+    "hamstrings": ["Lying Hamstring Curl", "Romanian Deadlift", "SL Romanian Deadlift", "Crossover RDL", "Deadlift to Row", "Snatch Grip RDL"],
+    "calves": ["Calf Raise", "SL Calf Raise", "Seated Calf Raise", "Down Dog Calf Stretch"],
+    "front-shoulders": ["Z-Press", "Double Arm Front Raise", "Arnold Press", "Overhead Press", "Shoulder Press"],
+    "rear-shoulders": ["Half Kneeling SA Rear Delt Row", "Rear Delt Row", "Face Pull", "Bent Over SA Lateral Raise", "Rear Delt Fly", "Seated SA Rear Delt Row"],
+    "shoulders": ["Crossover Lateral Raise", "Lateral Raise", "Arnold Press (Out & Up)", "Half Kneeling Shoulder Press"],
+    "triceps": ["Skull Crusher", "Overhead Tricep Extension", "Tricep Kick Back", "Bat Crusher", "Seated Overhead Tricep Extension"],
+    "biceps": ["Bicep Curl", "Wide Grip Bicep Curl", "Hammer Curl", "Preacher Curl", "Concentration Curl", "Bayesian Curl", "SA Bicep Curl", "Close Grip Supinated Bicep Curl", "Lunge w/ Bicep Curl"],
+    "forearms": ["Pronated Seated Wrist Curls", "Pronated Wrist Curls", "SA Wrist Curl"],
+    "hands": ["Supinated Wrist Curls", "Pronated Wrist Curls", "SA Wrist Curl", "Pronated Seated Wrist Curls"],
+    "abdominals": ["Plank", "Crunch", "Sit Up", "Dead Bug SA Press", "Leg Lower", "Double Leg Raise", "V-Up", "Bicycle Crunch", "Russian Twist", "Reverse Crunch", "Bear Cross Crunch"],
+    "obliques": ["Russian Twist", "Side Plank", "Side Bend", "SA Bicycle Crunch", "Bicycle Crunch", "Reverse Crunch"],
+    "arms": ["Close Grip Pronated Bicep Curl", "Wide Grip Bicep Curl", "Hammer Curl SA", "Squat to Bicep Curl"],
+    "legs": ["Front Rack Alternating Lunge", "High Knees", "Side Shuffle", "Jump Lunges"],
+    "back": ["Seated Row", "Bent Over Row (SC)", "SA Bent Over Row", "Kneeling Row"]
+};
+
+const femaleExerciseDB = {
+    "chest": ["Neutral Grip Bench Press", "Incline Fly", "Floor Press w/ Glute Bridge", "Cable Fly"],
+    "lats": ["Seated Row", "Kneeling Row", "Bent Over Row - Reverse Grip", "Prone Lat Pullover", "SA Bent Over Row"],
+    "lowerback": ["Good Morning", "Conventional Deadlift", "Suitcase SL RDL", "Superman", "Bird Dog"],
+    "traps": ["Bent Over Crossover Upright Row", "Shrug", "Upright Row", "Crossover Rear Delt Fly (Chest supported)", "Bent Over Row - Wide Grip"],
+    "quads": ["Goblet Squat", "Front Rack Bulgarian Split Squat", "Alternating Lunges", "Squat to Calf Raise", "Lying Leg Extension", "Front Rack Curtsy Lunge", "Squat Pulses"],
+    "glutes": ["Glute Bridge", "SL Glute Bridge", "Hip Thrust", "SL Hip Thrust", "Curtsy Lunge (Front Rack)", "Alternating Reverse Lunge", "Kneeling 45 Degree Kickback", "Frog Glute Bridge"],
+    "hamstrings": ["Romanian Deadlift", "SL Romanian Deadlift", "Lying Hamstring Curl", "SL Hamstring Curl", "Crossover RDL", "Split Stance RDL",],
+    "calves": ["Calf Raise", "SL Calf Raise", "Seated Calf Raise", "Three Stance Calf Raise", "Squat to Calf Raise"],
+    "front-shoulders": ["Shoulder Press", "Double Arm Front Raise", "Lunge w/ Shoulder Press", "Front Raise", "Arnold Press"],
+    "rear-shoulders": ["Face Pull", "Rear Delt Fly", "Seated SA Rear Delt Row", "Bent Over SA Lateral Raise"],
+    "shoulders": ["Crossover Lateral Raise", "Lateral Raise", "Seated Shoulder Press", "Half Kneeling Shoulder Press"],
+    "triceps": ["Overhead Tricep Extension", "Skull Crusher", "Tricep Kick Back", "Kneeling Overhead Tricep Extension", "Seated Overhead Tricep Extension", "Arnold Press"],
+    "biceps": ["Bicep Curl", "SA Bicep Curl", "Hammer Curl", "Wide Grip Pronated Bicep Curl", "Lunge w/ Bicep Curl", "Close Grip Supinated Bicep Curl", "Concentration Curl"],
+    "forearms": ["Pronated Wrist Curls", "Supinated Wrist Curls", "SA Wrist Curl"],
+    "hands": ["Pronated Wrist Curls", "Supinated Wrist Curls", "Pronated Seated Wrist Curls"],
+    "abdominals": ["Plank", "Bicycle Crunch", "Dead Bug SA Press", "Leg Lower", "V-Up", "Russian Twist", "Crunch", "Double Leg Raise"],
+    "obliques": ["Side Plank", "Alternating Oblique Punch", "Bear Cross Crunch", "SA Bicycle Crunch", "Side Bend", "Reverse Crunch", "Active Copenhagen Plank"],
+    "arms": ["Close Grip Pronated Bicep Curl", "Outward SA Bicep Curl", "Hammer Curl SA"],
+    "legs": ["Front Rack Alternating Lunge", "Jump Lunges", "High Knees", "Squat Jumps"],
+    "back": ["Seated SA Row", "Bent Over Row (SC)", "Pullover", "Lawnmower SA Row"]
+};
+
+
+const VIDEO_DIR = "video/exercises/";
+
+const VIDEO_LIBRARY = {
+    "Active Copenhagen Plank":                  "LQ2vB2ogwFCs-15j_Active Copenhagen Plank_FRONT.mp4",
+    "Alternating Oblique Punch":                "oLGbuybaQZhXqKhJ_Alternating Oblique Punch_FRONT.mp4",
+    "Alternating Reverse Lunge":                "kc5cxNYA_yfMP2ai_Alternating Reverse Lunge_FRONT.mp4",
+    "Arnold Press":                             "o5UHGEnQmMhCW6Jk_Arnold Press_FRONT.mp4",
+    "Arnold Press (Out & Up)":                  "6N05BVoq81bX8Did_Arnold Press _Out _ Up__FRONT.mp4",
+    "Bat Crusher":                              "Y2y8yT44rt2krF1-_Bat Crusher_FRONT.mp4",
+    "Bayesian Curl":                            "OD0_zOTahM0vICh8_Bayesian Curl_FRONT.mp4",
+    "Bear Cross Crunch":                        "levJr2BJlAQk4gg9_Bear Cross Crunch_FRONT.mp4",
+    "Bent Over Crossover Upright Row":          "9Wp7kXDX-CwU7Ofz_Bent Over Crossover Upright Row_FRONT.mp4",
+    "Bent Over Row (SC)":                       "JJpnzzNTRSx_gmr9_Bent Over Row _SC__ISOMETRIC.mp4",
+    "Bent Over Row - Wide Grip":                "mskVViVIPVGOBE8m_Bent Over Row - Wide Grip_ISOMETRIC.mp4",
+    "Bent Over SA Lateral Raise":               "w8O3eQSVE9wg-TSg_Bent Over SA Lateral Raise_ISOMETRIC.mp4",
+    "Bicycle Crunch":                           "IrtihZ58SPPMOO6B_Bicycle Crunch_FRONT.mp4",
+    "Bird Dog":                                 "xP0C8vhDiEgcpf_I_Bird Dog_FRONT.mp4",
+    "Bulgarian Split Squats":                   "BgdJl0yKnV88ymq0_Bulgarian Split Squats_FRONT.mp4",
+    "Cable Fly":                                "dIEKh6ZhNPOWfvI7_Cable Fly_FRONT.mp4",
+    "Calf Raise":                               "NbaXy1QmGQxQwJW0_Calf Raise_FRONT.mp4",
+    "Close Grip Pronated Bicep Curl":           "GgH9fp1OQalX5Muz_Close Grip Pronated Bicep Curl_FRONT.mp4",
+    "Close Grip Supinated Bicep Curl":          "wdRhZMXFpSQU2ues_Close Grip Supinated Bicep Curl_FRONT.mp4",
+    "Conventional Deadlift":                    "CwhsZFnpRmvOgntG_Conventional Deadlift _ISOMETRIC.mp4",
+    "Cossack Squat":                            "R11v964yIsxwvoMO_Cossack Squat_ISOMETRIC.mp4",
+    "Crossover Lateral Raise":                  "Kj6YMR_BjgxK4SUn_Crossover Lateral Raise_FRONT.mp4",
+    "Crossover RDL":                            "u93mD9-meWUVDOu4_Crossover RDL_ISOMETRIC.mp4",
+    "Crossover Rear Delt Fly (Chest supported)":"AUTOxvpgrFQ_PWMI_Crossover Rear Delt Fly _Chest supported__FRONT.mp4",
+    "Curtsy Lunge (Front Rack)":                "MvqHNCcbYSmtdRty_Curtsy Lunge _Front Rack__FRONT.mp4",
+    "Deadlift to Row":                          "OxvygJVxhpfgw4EQ_Deadlift to Row _ISOMETRIC.mp4",
+    "Decline Bench Press":                      "nC8AiUN87Oxnoo8g_Decline Bench Press_FRONT.mp4",
+    "Double Arm Front Raise":                   "caxDwBL8yvRjkrRj_Double Arm Front Raise_ISOMETRIC.mp4",
+    "Double Leg Raise":                         "qknQ-d4M_Br_ss0w_Double Leg Raise_FRONT.mp4",
+    "Down Dog Calf Stretch":                    "YahdGizpmd0Un_U1_Down Dog Calf Stretch_FRONT.mp4",
+    "Face Pull":                                "DgFl-_qTO3CMafG1_Face Pull_FRONT.mp4",
+    "Feet Raised Glute Bridge":                 "M4l_CdmDss0hJ7B5_Feet Raised Glute Bridge_FRONT.mp4",
+    "Frog Glute Bridge":                        "9-3O_Afiuy13CUTz_Frog Glute Bridge_FRONT.mp4",
+    "Front Rack Alternating Lunge":             "xMGj08G7CJEQM58J_Front Rack Alternating Lunge_FRONT.mp4",
+    "Front Rack Bulgarian Split Squat":         "hKIqQmkA7UovbZ8M_Front Rack Bulgarian Split Squat_FRONT.mp4",
+    "Front Rack Curtsy Lunge":                  "9MH7A_9NhoYgM50R_Front Rack Curtsy Lunge_FRONT.mp4",
+    "Front Raise":                              "afIeL0sSvCibd5Io_Front Raise_FRONT.mp4",
+    "Front Squat":                              "mVkeqnnhQxy90lx4_Front Squat _ISOMETRIC.mp4",
+    "Glute Bridge":                             "_sIupJAHlcVn-Xg-_Neutral Grip Floor Press w_ Glute Bridge _FRONT.mp4",
+    "Goblet Squat":                             "NAPaniNmLMCHiAfu_Goblet Squat_FRONT.mp4",
+    "Good Morning":                             "i_POA2iQVNvyvNkd_Good Morning_FRONT.mp4",
+    "Half Kneeling SA Rear Delt Row":           "bIZADKDdtjvz-thO_Half Kneeling SA Rear Delt Row_ISOMETRIC.mp4",
+    "Half Kneeling Shoulder Press":             "SPERbRAhD-GSlt8n_Half Kneeling Shoulder Press_FRONT.mp4",
+    "Hammer Curl SA":                           "uLE9o5BJ6iTkM1Yq_Hammer Curl SA_ISOMETRIC.mp4",
+    "High Knees":                               "pygwHU-lm1Bo8_mG_High Knees_FRONT.mp4",
+    "Incline Bench Press":                      "ogkieqMAWGs40hLz_Incline Bench Press_FRONT.mp4",
+    "Incline Fly":                              "WyfJudU78k1S7tdd_Incline Fly_FRONT.mp4",
+    "Incline Pec Fly":                          "bEdEoAy9X9b3fTFX_Incline Pec Fly_FRONT.mp4",
+    "Jump Lunges":                              "O38D61eYZ0hHahp-_Jump Lunges _FRONT.mp4",
+    "Kneeling 45 Degree Kickback":              "1gDY2ub5NYnOXh6Y_Kneeling 45 Degree Kickback _FRONT.mp4",
+    "Kneeling Overhead Tricep Extension":       "BapmOLmwmwT-qRQG_Kneeling Overhead Tricep Extension _ISOMETRIC.mp4",
+    "Kneeling Row":                             "pyWwWpNjvkaRbN9w_Kneeling Row _ISOMETRIC.mp4",
+    "Lateral Raise":                            "uw8wftOlJBcDA1O-_Lateral Raise _ISOMETRIC.mp4",
+    "Lawnmower SA Row":                         "mnFJJKCdyBXkiOEP_Lawnmower SA Row_ISOMETRIC.mp4",
+    "Lunge w/ Bicep Curl":                      "aHEIE2sgut4z1PDV_Lunge w_ Bicep Curl_ISOMETRIC.mp4",
+    "Lunge w/ Shoulder Press":                  "53hKY2GF1CBr1563_Lunge w_ Shoulder Press _ISOMETRIC.mp4",
+    "Lying Hamstring Curl":                     "n6gXbT9Vpj_kbfbe_Lying Hamstring Curl_FRONT.mp4",
+    "Lying Leg Extension":                      "w2wqkrM8jRJfEzCY_Lying Leg Extension_FRONT.mp4",
+    "Neutral Grip Bench Press":                 "ZErjYhtAqesMcCbQ_Neutral Grip Bench Press_FRONT.mp4",
+    "Outward SA Bicep Curl":                    "mAzH-UFQlRFvHMvG_Outward SA Bicep Curl_ISOMETRIC.mp4",
+    "Overhead Press":                           "Z5_MkqZta7yqS6uO_Overhead Press_FRONT.mp4",
+    "Preacher Curl":                            "sCZdnj4EFIiPbGpw_Preacher Curl_FRONT.mp4",
+    "Pronated Seated Wrist Curls":              "3OJb7K_5R7OxHM_T_Pronated Seated Wrist Curls_FRONT.mp4",
+    "Pronated Wrist Curls":                     "gvTZ-ehREKqis-Rq_Pronated Wrist Curls_FRONT.mp4",
+    "Prone Lat Pullover":                       "dSs3BUh5UvyssR6N_Prone Lat Pullover_ISOMETRIC.mp4",
+    "Pullover":                                 "fmbfgvsgZcjFScqy_Pullover_ISOMETRIC.mp4",
+    "Rear Delt Fly":                            "BMD4sTSeuIbT039N_Rear Delt Fly_FRONT.mp4",
+    "Reverse Crunch":                           "ypgeZE5cuOU7ROft_Reverse Crunch_FRONT.mp4",
+    "Russian Twist":                            "Yn2ROOMa0MxsmjWg_Russian Twist_FRONT.mp4",
+    "SA Bent Over Row":                         "qvX3RF9gPoq-J55X_SA Bent Over Row_FRONT.mp4",
+    "SA Bicep Curl":                            "eywSE2pJfzCAZ36K_SA Bicep Curl_FRONT.mp4",
+    "SA Bicycle Crunch":                        "wQLk8ONQ792rCgVZ_SA Bicycle Crunch_FRONT.mp4",
+    "SA Wrist Curl":                            "LYuGjoJVC1ouyose_SA Wrist Curl_FRONT.mp4",
+    "SL Calf Raise":                            "Ljy9aC9nrGXr9Vhs_SL Calf Raise_ISOMETRIC.mp4",
+    "SL Glute Bridge":                          "YUMQgGCRcBnzVYxe_SL Glute Bridge _FRONT.mp4",
+    "SL Hamstring Curl":                        "X0Mp47MX_HUZ2NtT_SL Hamstring Curl_ISOMETRIC.mp4",
+    "SL Hip Thrust":                            "ScBtQRHtKhFyeZ7C_SL Hip Thrust_ISOMETRIC.mp4",
+    "SL Romanian Deadlift":                     "_WwgO6q9BOEsPss1_SL Romanian Deadlift_ISOMETRIC.mp4",
+    "Seated Calf Raise":                        "X6TVtOLbjOfcYuw5_Seated Calf Raise_ISOMETRIC.mp4",
+    "Seated Overhead Tricep Extension":         "VKUUeSprub2NqTx__Seated Overhead Tricep Extension_ISOMETRIC.mp4",
+    "Seated Row":                               "WJcu2Z4ev7fz393l_Seated Row_FRONT.mp4",
+    "Seated SA Rear Delt Row":                  "bpihcail9JkpqV2F_Seated SA Rear Delt Row_FRONT.mp4",
+    "Seated SA Row":                            "SGOtWZSH9OgSDhBz_Seated SA Row_ISOMETRIC.mp4",
+    "Seated Shoulder Press":                    "eWv7BJgbk5hWeshA_Seated Shoulder Press _FRONT.mp4",
+    "Shrug":                                    "_b_ly82NXljg8idl_Shrug _ISOMETRIC.mp4",
+    "Side Bend":                                "EB0y3Mu7fjim60oT_Side Bend_ISOMETRIC.mp4",
+    "Side Shuffle":                             "xkI5agmuCgGh3Uc5_Side Shuffle_FRONT.mp4",
+    "Sit Up":                                   "ul5cVs5YfCveYLzY_Sit up_FRONT.mp4",
+    "Skull Crusher":                            "ZWUhwkIP_sDT9Slt_Skull Crusher _ISOMETRIC.mp4",
+    "Snatch Grip Deadlift":                     "qFSjZvCIkxEZ_OrG_Snatch Grip Deadlift_ISOMETRIC.mp4",
+    "Snatch Grip RDL":                          "LJTQeggcepDmnrs8_Snatch Grip RDL_FRONT.mp4",
+    "Spiderman Push Up":                        "lgAjCAmVvTwOi7m2_Spiderman Push Up_FRONT.mp4",
+    "Squat & Press":                            "dZqyS1nQ7BizJQJT_Squat _ Press_FRONT.mp4",
+    "Squat Jumps":                              "Edx3shh5sfJn97uU_Squat Jumps_FRONT.mp4",
+    "Squat to Bicep Curl":                      "d4l7-jsGfUWD3zxK_Squat to Bicep Curl _ISOMETRIC.mp4",
+    "Squat to Calf Raise":                      "tJ-gYXy5-n02dWNy_Squat to Calf Raise_ISOMETRIC.mp4",
+    "Stiff Leg Deadlift":                       "TK43u-pNBGuW4uLc_Stiff Leg Deadlift_FRONT.mp4",
+    "Suitcase SL RDL":                          "yhRqSNGwlOwk8GCa_Suitcase SL RDL_FRONT.mp4",
+    "Supinated Wrist Curls":                    "goTTjebGamboG8ml_Supinated Wrist Curls_FRONT.mp4",
+    "Three Stance Calf Raise":                  "eLQdhOCXM_-BXbL1_Three Stance Calf Raise_FRONT.mp4",
+    "Trap Bar Deadlift":                        "_b8dWX8XobCuZRPW_Trap Bar Deadlift_ISOMETRIC.mp4",
+    "Tricep Kick Back":                         "A55c3KnROKrR521X_Tricep Kick Back_FRONT.mp4",
+    "V-Up":                                     "LEJO0PCBu365XQrW_V-Up_FRONT.mp4",
+    "Wide Grip Bicep Curl":                     "LLPQEhRgDbVZXYLU_Wide Grip Bicep Curl _ISOMETRIC.mp4",
+    "Wide Grip Pronated Bicep Curl":            "NEMMQyulEiGYKs6D_Wide Grip Pronated Bicep Curl_FRONT.mp4",
+    "Z-Press":                                  "Y6T61cirU1atejTE_Z-Press_FRONT.mp4",
+    "Zercher Lunge":                            "NQyOYOQoqYCdSHMS_Zercher Lunge_FRONT.mp4",
+};
+
+
+function vpGetSrc(name) {
+    const f = VIDEO_LIBRARY[name];
+    return f ? VIDEO_DIR + f : null;
+}
+
+
+function vpOpen(index) {
+    const ex = chosenExercises[index];
+    if (!ex) return;
+
+    const src = vpGetSrc(ex.name);
+
+    document.getElementById('vp-title').textContent  = ex.name;
+    document.getElementById('vp-muscle').textContent = ex.muscle;
+    document.getElementById('vp-protocol').textContent = ex.protocol;
+    document.getElementById('vp-rest').textContent     = ex.rest + ' REST';
+    document.getElementById('vp-tempo').textContent    = ex.tempo;
+    document.getElementById('vp-load').textContent     = ex.load;
+
+    const vid     = document.getElementById('vp-video');
+    const missing = document.getElementById('vp-missing');
+
+    if (src) {
+        vid.src = src;
+        vid.classList.remove('hidden');
+        missing.classList.add('hidden');
+        vid.play().catch(() => {});
+    } else {
+        vid.removeAttribute('src'); vid.load();
+        vid.classList.add('hidden');
+        missing.classList.remove('hidden');
+    }
+
+    const modal = document.getElementById('vp-modal');
+    modal.classList.remove('hidden');
+    requestAnimationFrame(() => modal.classList.add('vp-open'));
+    document.body.style.overflow = 'hidden';
+}
+
+
+function vpClose() {
+    const modal = document.getElementById('vp-modal');
+    const vid   = document.getElementById('vp-video');
+    const nav   = document.getElementById('vp-nav');
+    modal.classList.remove('vp-open');
+    document.body.style.overflow = '';
+    
+    _vpAllMode  = false;
+    _vpAllIndex = 0;
+    setTimeout(() => {
+        modal.classList.add('hidden');
+        vid.onended = null;
+        vid.loop    = true;   
+        vid.pause(); vid.removeAttribute('src'); vid.load();
+        if (nav) nav.classList.add('hidden');
+    }, 240);
+}
+
+document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+        const vp = document.getElementById('vp-modal');
+        const wo = document.getElementById('workout-overlay');
+        if (vp && !vp.classList.contains('hidden')) vpClose();
+        else if (wo && wo.classList.contains('wo-open')) woClose();
+    }
+});
+
+window.onload = function() {
+    
+    const gender = localStorage.getItem('orbit_gender') || 'male';
+    loadModel(gender);
+    
+    
+    if(localStorage.getItem('orbit_weight')) {
+        updateStatsDisplay();
+    }
+};
+
+function startAppFlow() {
+    const target = document.getElementById('lab-view');
+    const navHeight = 90; 
+    
+    
+    const elementPosition = target.getBoundingClientRect().top;
+    const offsetPosition = elementPosition + window.pageYOffset - navHeight;
+
+    
+    window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+    });
+    
+    
+    const hasData = localStorage.getItem('orbit_weight') && localStorage.getItem('orbit_height');
+    if (!hasData) {
+        setTimeout(() => {
+            const modal = document.getElementById('onboarding-modal');
+            modal.style.display = 'flex';
+            void modal.offsetWidth; 
+            modal.style.opacity = '1';
+        }, 800); 
+    }
+}
+        function saveProfile() {
+            const gender = document.getElementById('user-gender').value;
+            const goal = document.getElementById('user-goal').value;
+            const weight = document.getElementById('user-weight').value;
+            const height = document.getElementById('user-height').value;
+
+            if(!weight || !height) { alert("Please input Weight and Height."); return; }
+
+            localStorage.setItem('orbit_gender', gender);
+            localStorage.setItem('orbit_goal', goal);
+            localStorage.setItem('orbit_weight', weight);
+            localStorage.setItem('orbit_height', height);
+            
+            document.getElementById('onboarding-modal').style.opacity = '0';
+            setTimeout(() => { document.getElementById('onboarding-modal').style.display = 'none'; }, 500);
+
+            updateStatsDisplay();
+            loadModel(gender);
+        }
+function resetProfile() {
+            localStorage.clear();
+            chosenExercises = [];
+            selectedMuscleGroups.clear(); 
+            document.getElementById('clear-map-btn').classList.add('hidden');
+            
+            document.getElementById('exercise-list').innerHTML = `
+                <div id="empty-state" class="h-full flex flex-col items-center justify-center text-center py-8">
+    <div class="w-16 h-16 rounded-full bg-teal-50 flex items-center justify-center mb-4 text-teal-500">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path></svg>
+    </div>
+    <p class="text-sm font-bold text-slate-700 px-4">Tap a muscle on the 3D map to start building your custom routine.</p>
+    
+    <div class="mt-8 border-t border-slate-100 pt-6 w-full px-6">
+        <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-4">Not sure where to begin?</p>
+        <div class="flex flex-col gap-2.5">
+            <button onclick="applyTemplate('push')" class="w-full py-3.5 bg-slate-50 border border-slate-200 text-slate-700 rounded-xl text-[10px] font-black uppercase tracking-widest hover:border-teal-500 hover:text-teal-600 transition-all">Start Push Day</button>
+            <button onclick="applyTemplate('pull')" class="w-full py-3.5 bg-slate-50 border border-slate-200 text-slate-700 rounded-xl text-[10px] font-black uppercase tracking-widest hover:border-teal-500 hover:text-teal-600 transition-all">Start Pull Day</button>
+            <button onclick="applyTemplate('legs')" class="w-full py-3.5 bg-slate-50 border border-slate-200 text-slate-700 rounded-xl text-[10px] font-black uppercase tracking-widest hover:border-teal-500 hover:text-teal-600 transition-all">Start Leg Day</button>
+        </div>
+    </div>
+</div>`;
+            document.getElementById('muscle-counter').innerText = "0 Exercises";
+            
+            document.getElementById('target-names').innerText = "AWAITING SELECTION";
+            document.getElementById('target-names').classList.replace('text-teal-600', 'text-slate-400');
+            
+            document.getElementById('target-dot').classList.add('hidden');
+            
+            document.getElementById('stat-display').innerHTML = '<span class="text-sm text-slate-400 font-medium">Awaiting Calibration...</span>';
+            
+            const modal = document.getElementById('onboarding-modal');
+            
+            modal.style.opacity = '0';
+            modal.style.transition = "opacity 0.6s cubic-bezier(0.25, 0.1, 0.25, 1)";
+            modal.style.display = 'flex';
+            
+            setTimeout(() => {
+                modal.style.opacity = '1';
+            }, 10);
+        }
+
+        function updateStatsDisplay() {
+            const w = localStorage.getItem('orbit_weight');
+            const h = localStorage.getItem('orbit_height');
+            const g = localStorage.getItem('orbit_goal');
+            let goalLabel = g === 'burn' ? 'Burn Fat' : g === 'build' ? 'Build Muscle' : 'Strength';
+
+            document.getElementById('stat-display').innerHTML = `
+                <div class="flex items-end gap-2 border-b border-slate-700 pb-3 mb-2">
+                    <span class="text-4xl font-black font-display leading-none">${w}</span><span class="text-xs text-slate-400">kg</span>
+                    <span class="text-slate-600 font-black mx-1">/</span>
+                    <span class="text-4xl font-black font-display leading-none">${h}</span><span class="text-xs text-slate-400">cm</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-teal-400 animate-pulse"></span>
+                    <span class="text-[10px] uppercase tracking-widest font-bold text-teal-400">${goalLabel}</span>
+                </div>
+            `;
+        }
+
+ function calculateProtocol() {
+    const goal = localStorage.getItem('orbit_goal');
+    
+    if(goal === 'burn') return { 
+        sets: 4, reps: "15-20", rest: "45s", 
+        tempo: "QUICK & STEADY", load: "MODERATE WEIGHT" 
+    };
+    if(goal === 'build') return { 
+        sets: 4, reps: "8-12", rest: "90s", 
+        tempo: "SLOW ON WAY DOWN", load: "CHALLENGING WEIGHT" 
+    };
+    
+    return { 
+        sets: 5, reps: "3-5", rest: "3 MIN", 
+        tempo: "EXPLOSIVE PUSH", load: "VERY HEAVY" 
+    };
+}
+
+        async function loadModel(gender) {
+            const frontFile = gender === 'male' ? 'male-front.svg' : 'female-front.svg';
+            const backFile  = gender === 'male' ? 'male-back.svg'  : 'female-back.svg';
+
+            try {
+                const [frontRes, backRes] = await Promise.all([
+                    fetch(`assets/${frontFile}`),
+                    fetch(`assets/${backFile}`)
+                ]);
+
+                if (!frontRes.ok || !backRes.ok) throw new Error("SVG missing");
+
+                document.getElementById('front-container').innerHTML = await frontRes.text();
+                document.getElementById('back-container').innerHTML = await backRes.text();
+
+                setTimeout(attachMuscleInteractions, 200);
+            } catch (err) {
+                console.error(err);
+                document.getElementById('front-container').innerHTML = `<p class="text-red-500 font-bold text-center p-10">Ensure your files are in the 'assets' folder and you are running a Local Server.</p>`;
+            }
+        }
+
+        function toggleRotation() {
+            isFlipped = !isFlipped;
+            document.getElementById('mainCard').classList.toggle('flipped', isFlipped);
+        }
+
+    function getMajorGroup(rawString) {
+            if (!rawString) return 'unknown';
+            const str = rawString.toLowerCase();
+            
+            
+            if (str.includes('lat')) return 'lats';
+            if (str.includes('lowerback') || str.includes('lower-back')) return 'lowerback';
+            if (str.includes('trap')) return 'traps';
+            if (str.includes('quad')) return 'quads';
+            if (str.includes('glute')) return 'glutes';
+            if (str.includes('ham')) return 'hamstrings'; 
+            
+            
+            if (str.includes('calf') || str.includes('calves') || str.includes('tibialis') || str.includes('shin')) return 'calves';
+            
+            if (str.includes('front-shoulder')) return 'front-shoulders';
+            if (str.includes('rear-shoulder')) return 'rear-shoulders';
+            if (str.includes('tricep')) return 'triceps';
+            if (str.includes('bicep')) return 'biceps'; 
+            if (str.includes('forearm')) return 'forearms';
+            if (str.includes('hand')) return 'hands';
+            if (str.includes('oblique')) return 'obliques';
+            if (str.includes('ab') || str.includes('core')) return 'abdominals';
+            if (str.includes('chest') || str.includes('pec')) return 'chest';
+            if (str.includes('neck')) return 'neck'; 
+            
+            
+            if (str.includes('shoulder') || str.includes('delt')) return 'shoulders';
+            if (str.includes('arm')) return 'arms';
+            if (str.includes('leg')) return 'legs';
+            if (str.includes('back')) return 'back';
+            
+            return 'unknown'; 
+        }
+      function attachMuscleInteractions() {
+            const svgs = document.querySelectorAll('#front-container svg, #back-container svg');
+            
+            
+            if(svgs.length === 0) return;
+
+            svgs.forEach(svg => {
+                svg.addEventListener('click', (e) => {
+                    e.stopPropagation(); 
+                    
+                    
+                    if (!localStorage.getItem('orbit_weight') || !localStorage.getItem('orbit_height')) {
+                        const modal = document.getElementById('onboarding-modal');
+                        modal.style.display = 'flex';
+                        void modal.offsetWidth;
+                        modal.style.opacity = '1';
+                        return; 
+                    }
+
+                    const clickedElement = e.target;
+                    
+                    let elementId = clickedElement.id || "";
+                    let elementClass = typeof clickedElement.className === 'string' ? clickedElement.className : (clickedElement.className?.baseVal || "");
+                    
+                    const parentGroup = clickedElement.closest('g');
+                    let parentId = parentGroup ? parentGroup.id : "";
+                    let parentClass = parentGroup ? (typeof parentGroup.className === 'string' ? parentGroup.className : (parentGroup.className?.baseVal || "")) : "";
+
+                    const combinedData = `${elementId} ${elementClass} ${parentId} ${parentClass}`.trim();
+                    
+                    if (!combinedData) return;
+
+                    const groupName = getMajorGroup(combinedData);
+                    
+                    if (groupName !== 'unknown') {
+                        const isSelected = selectedMuscleGroups.has(groupName);
+                        const allShapes = document.querySelectorAll('svg path, svg polygon, svg rect');
+                        
+                        allShapes.forEach(shape => {
+                            let sId = shape.id || "";
+                            let sClass = typeof shape.className === 'string' ? shape.className : (shape.className?.baseVal || "");
+                            let pGroup = shape.closest('g');
+                            let pId = pGroup ? pGroup.id : "";
+                            let pClass = pGroup ? (typeof pGroup.className === 'string' ? pGroup.className : (pGroup.className?.baseVal || "")) : "";
+                            
+                            let shapeData = `${sId} ${sClass} ${pId} ${pClass}`.trim();
+                            
+                            if (shapeData && getMajorGroup(shapeData) === groupName) {
+                                if (isSelected) {
+                                    shape.style.fill = ""; 
+                                } else {
+                                    shape.style.fill = "#ff0000c2"; 
+                                }
+                            }
+                        });
+
+                        if (isSelected) {
+                            removeMuscleSelection(groupName);
+                        } else {
+                            handleMuscleSelection(groupName); 
+                        }
+                    }
+                });
+                
+svg.addEventListener('mousemove', handleTooltipMove);
+svg.addEventListener('mouseleave', hideTooltip);
+                
+            });
+        }
+
+function handleMuscleSelection(groupName) {
+    if (groupName === 'unknown' || selectedMuscleGroups.has(groupName)) {
+        return; 
+    }
+
+    selectedMuscleGroups.add(groupName);
+
+    const targetNamesEl = document.getElementById('target-names');
+    if(targetNamesEl) {
+        targetNamesEl.innerText = Array.from(selectedMuscleGroups).join(', ').toUpperCase();
+        targetNamesEl.classList.replace('text-slate-400', 'text-teal-600');
+    }
+    
+    document.getElementById('target-dot').classList.remove('hidden');
+
+    const protocol = calculateProtocol();
+    
+    
+    const userGender = localStorage.getItem('orbit_gender') || 'male';
+    const activeDB = userGender === 'female' ? femaleExerciseDB : maleExerciseDB;
+
+    
+    const fullExerciseList = (activeDB[groupName] || []).filter(name => !!vpGetSrc(name));
+
+    
+    if (fullExerciseList.length === 0) {
+        selectedMuscleGroups.delete(groupName);
+        const targetNamesEl = document.getElementById('target-names');
+        if (targetNamesEl) {
+            if (selectedMuscleGroups.size === 0) {
+                targetNamesEl.innerText = 'AWAITING SELECTION';
+                targetNamesEl.classList.replace('text-teal-600', 'text-slate-400');
+                document.getElementById('target-dot').classList.add('hidden');
+            } else {
+                targetNamesEl.innerText = Array.from(selectedMuscleGroups).join(', ').toUpperCase();
+            }
+        }
+        return;
+    }
+
+    const shuffledList = [...fullExerciseList].sort(() => 0.5 - Math.random());
+    const selectedExercises = shuffledList.slice(0, 3);
+    
+    selectedExercises.forEach(exerciseName => {
+        const exerciseData = {
+            dbKey: groupName, 
+            muscle: groupName.toUpperCase(),
+            name: exerciseName,
+            protocol: `${protocol.sets} SETS × ${protocol.reps} REPS`,
+            rest: protocol.rest,
+            tempo: protocol.tempo,   
+            load: protocol.load      
+        };
+        chosenExercises.push(exerciseData);
+    });
+
+    renderExerciseList();
+    document.getElementById('muscle-counter').innerText = `${chosenExercises.length} Exercises`;
+}
+
+       
+        function removeMuscleSelection(groupName) {
+            selectedMuscleGroups.delete(groupName);
+            chosenExercises = chosenExercises.filter(ex => ex.muscle !== groupName.toUpperCase());
+
+            const targetNamesEl = document.getElementById('target-names');
+            if(targetNamesEl) {
+                if (selectedMuscleGroups.size === 0) {
+                    targetNamesEl.innerText = "AWAITING SELECTION";
+                    targetNamesEl.classList.replace('text-teal-600', 'text-slate-400');
+                    
+                    document.getElementById('target-dot').classList.add('hidden');
+                } else {
+                    targetNamesEl.innerText = Array.from(selectedMuscleGroups).join(', ').toUpperCase();
+                }
+            }
+            document.getElementById('muscle-counter').innerText = `${chosenExercises.length} Exercises`;
+            renderExerciseList();
+        }
+
+       function renderExerciseList() {
+    const list = document.getElementById('exercise-list');
+    const clearBtn = document.getElementById('clear-map-btn'); 
+    list.innerHTML = '';
+
+    
+    if (chosenExercises.length === 0) {
+        if (clearBtn) clearBtn.style.display = 'none'; 
+        
+        list.innerHTML = `
+            <div id="empty-state" class="h-full flex flex-col items-center justify-center text-center py-8">
+                <div class="w-16 h-16 rounded-full bg-teal-50 flex items-center justify-center mb-4 text-teal-500">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path></svg>
+                </div>
+                <p class="text-sm font-bold text-slate-700 px-4">Tap a muscle on the 3D map to start building your custom routine.</p>
+                
+                <div class="mt-8 border-t border-slate-100 pt-6 w-full px-6">
+                    <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-4">Not sure where to begin?</p>
+                    <div class="flex flex-col gap-2.5">
+                        <button onclick="applyTemplate('push')" class="w-full py-3.5 bg-slate-50 border border-slate-200 text-slate-700 rounded-xl text-[10px] font-black uppercase tracking-widest hover:border-teal-500 hover:text-teal-600 transition-all">Start Push Day</button>
+                        <button onclick="applyTemplate('pull')" class="w-full py-3.5 bg-slate-50 border border-slate-200 text-slate-700 rounded-xl text-[10px] font-black uppercase tracking-widest hover:border-teal-500 hover:text-teal-600 transition-all">Start Pull Day</button>
+                        <button onclick="applyTemplate('legs')" class="w-full py-3.5 bg-slate-50 border border-slate-200 text-slate-700 rounded-xl text-[10px] font-black uppercase tracking-widest hover:border-teal-500 hover:text-teal-600 transition-all">Start Leg Day</button>
+                    </div>
+                </div>
+            </div>
+        `;
+        return;
+    } else {
+        if (clearBtn) clearBtn.style.display = 'flex'; 
+    }
+
+            
+chosenExercises.forEach((exerciseData, index) => { 
+    
+    const _g  = localStorage.getItem('orbit_gender')||'male';
+    const _db = _g==='female' ? femaleExerciseDB : maleExerciseDB;
+    const _pl = (_db[exerciseData.dbKey]||[]).filter(n=>!!vpGetSrc(n));
+    const _cs = _pl.filter(n=>!chosenExercises.map(e=>e.name).includes(n));
+    const _canSwap = _cs.length > 0;
+    list.innerHTML += `
+        <div class="p-4 rounded-xl border border-slate-200 bg-white flex flex-col animate-pulse-once shadow-sm group">
+            <div class="flex justify-between items-start mb-3">
+                <div>
+                    <p class="text-[9px] font-black uppercase tracking-widest text-teal-500 mb-1">${exerciseData.muscle}</p>
+                    <h4 class="font-bold text-slate-900 leading-tight">${exerciseData.name}</h4>
+                </div>
+                
+                <div class="flex items-center gap-3 opacity-100 lg:opacity-0 group-hover:opacity-100 transition-opacity">
+                    ${_canSwap
+                        ? `<button onclick="swapExercise(${index})" class="text-[9px] font-black text-slate-400 hover:text-teal-500 uppercase tracking-widest transition-colors flex items-center gap-1"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>Swap</button>`
+                        : `<span class="text-[9px] font-black text-slate-300 uppercase tracking-widest">All shown</span>`
+                    }
+                    <button onclick="removeSpecificExercise(${index})" class="text-[9px] font-black text-slate-400 hover:text-red-500 uppercase tracking-widest transition-colors flex items-center gap-1">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="flex gap-2 mb-3">
+                <span class="text-[9px] font-black bg-slate-50 border border-slate-200 px-2 py-1.5 rounded text-slate-600">${exerciseData.protocol}</span>
+                <span class="text-[9px] font-black bg-slate-800 border border-slate-800 px-2 py-1.5 rounded text-white">${exerciseData.rest} REST</span>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4 pt-3 border-t border-slate-100">
+                <div>
+                    <span class="block text-[8px] font-black text-slate-400 uppercase tracking-widest mb-0.5">Tempo</span>
+                    <span class="text-[10px] font-bold text-slate-700">${exerciseData.tempo}</span>
+                </div>
+                <div>
+                    <span class="block text-[8px] font-black text-slate-400 uppercase tracking-widest mb-0.5">Target Load</span>
+                    <span class="text-[10px] font-bold text-slate-700">${exerciseData.load}</span>
+                </div>
+            </div>
+
+            <button class="ex-watch-btn" onclick="vpOpen(${index})">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                Watch Form
+            </button>
+        </div>
+    `;
+});
+        }
+
+        function goBackToLab() { woClose(); }   
+
+function woOpen() {
+    const ov = document.getElementById('workout-overlay');
+    ov.classList.remove('hidden-overlay');
+    
+    requestAnimationFrame(() => ov.classList.add('wo-open'));
+    document.body.style.overflow = 'hidden';
+}
+
+function woClose() {
+    const ov = document.getElementById('workout-overlay');
+    ov.classList.remove('wo-open');
+    document.body.style.overflow = '';
+}
+
+
+function removeSpecificExercise(index) {
+    
+    const removedMuscle = chosenExercises[index].dbKey; 
+
+    
+    chosenExercises.splice(index, 1);
+
+    
+    const stillHasMuscle = chosenExercises.some(ex => ex.dbKey === removedMuscle);
+
+    if (!stillHasMuscle) {
+        
+        selectedMuscleGroups.delete(removedMuscle);
+
+        
+        const targetNamesEl = document.getElementById('target-names');
+        if (selectedMuscleGroups.size === 0) {
+            targetNamesEl.innerText = "AWAITING SELECTION";
+            targetNamesEl.classList.replace('text-teal-600', 'text-slate-400');
+            document.getElementById('target-dot').classList.add('hidden');
+        } else {
+            targetNamesEl.innerText = Array.from(selectedMuscleGroups).join(', ').toUpperCase();
+        }
+
+        
+        const allShapes = document.querySelectorAll('svg path, svg polygon, svg rect');
+        allShapes.forEach(shape => {
+            let sId = shape.id || "";
+            let sClass = typeof shape.className === 'string' ? shape.className : (shape.className?.baseVal || "");
+            let pGroup = shape.closest('g');
+            let pId = pGroup ? pGroup.id : "";
+            let pClass = pGroup ? (typeof pGroup.className === 'string' ? pGroup.className : (pGroup.className?.baseVal || "")) : "";
+            
+            let shapeData = `${sId} ${sClass} ${pId} ${pClass}`.trim();
+            if (shapeData && getMajorGroup(shapeData) === removedMuscle) {
+                shape.style.fill = ""; 
+            }
+        });
+    }
+
+    
+    document.getElementById('muscle-counter').innerText = `${chosenExercises.length} Exercises`;
+    renderExerciseList();
+}
+
+
+function swapExercise(index) {
+    const currentData = chosenExercises[index];
+    const groupName = currentData.dbKey;
+    
+    
+    const userGender = localStorage.getItem('orbit_gender') || 'male';
+    const activeDB = userGender === 'female' ? femaleExerciseDB : maleExerciseDB;
+
+    
+    const fullList = (activeDB[groupName] || []).filter(name => !!vpGetSrc(name));
+
+    
+    const currentlyUsedNames = chosenExercises.map(ex => ex.name);
+
+    
+    const alternatives = fullList.filter(exerciseName => !currentlyUsedNames.includes(exerciseName));
+
+    if (alternatives.length > 0) {
+        
+        const newExerciseName = alternatives[Math.floor(Math.random() * alternatives.length)];
+        chosenExercises[index].name = newExerciseName;
+        
+        
+        renderExerciseList();
+    } else {
+        alert("You've cycled through all available alternative exercises for this muscle group!");
+    }
+}
+    </script>
+
+    <script>
+        
+        function toggleGymTheme() {
+            const isDark = document.documentElement.classList.toggle('dark');
+            const icon = document.getElementById('theme-toggle-icon');
+            if (icon) icon.textContent = isDark ? "☀️" : "🌙";
+        }
+    </script>
+
+    
+    <div id="vp-modal"
+         class="hidden fixed inset-0 z-[500] flex items-end sm:items-center justify-center sm:p-6"
+         onclick="if(event.target===this)vpClose()">
+
+        
+        <div class="absolute inset-0 bg-slate-950/85 backdrop-blur-sm"></div>
+
+        
+        <div id="vp-card"
+             class="relative z-10 w-full sm:max-w-2xl bg-black rounded-t-3xl sm:rounded-3xl overflow-hidden shadow-[0_32px_80px_rgba(0,0,0,.8)]">
+
+            
+            <div class="relative bg-black" style="aspect-ratio:16/9">
+
+                <video id="vp-video" autoplay loop muted playsinline controls
+                       class="hidden absolute inset-0 w-full h-full object-contain bg-black"></video>
+
+                
+                <button onclick="vpClose()"
+                        class="absolute top-3 right-3 z-20 w-8 h-8 rounded-full
+                               bg-slate-900/70 backdrop-blur-sm flex items-center justify-center
+                               text-white hover:bg-red-500 transition-colors">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                              d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+
+                
+                <div id="vp-lower-third" class="absolute inset-0 pointer-events-none"
+                     style="background:linear-gradient(to top,rgba(0,0,0,.92) 0%,rgba(0,0,0,.45) 40%,transparent 70%);">
+                    <div class="absolute bottom-0 left-0 right-0 px-5 pb-4">
+                        <p id="vp-muscle"
+                           class="text-teal-400 text-[10px] font-black uppercase tracking-[.25em] mb-1"></p>
+                        <h2 id="vp-title"
+                            class="font-display text-2xl sm:text-3xl font-black text-white uppercase
+                                   tracking-tight leading-tight"></h2>
+                    </div>
+                </div>
+
+                
+                <div id="vp-missing"
+                     class="hidden absolute inset-0 flex flex-col items-center justify-center
+                            text-center bg-slate-900 px-6">
+                    <div class="w-14 h-14 rounded-full bg-white/10 flex items-center justify-center
+                                text-teal-400 mb-4">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                  d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14
+                                     M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                        </svg>
+                    </div>
+                    <p class="text-white font-bold text-sm">No demo mapped for this exercise.</p>
+                </div>
+            </div>
+
+            
+            <div class="grid grid-cols-4 divide-x divide-white/10 bg-slate-900 border-t border-white/10">
+                <div class="flex flex-col items-center gap-0.5 py-3 px-2 text-center">
+                    <span class="text-[8px] font-black uppercase tracking-[.16em] text-teal-400">Sets / Reps</span>
+                    <span id="vp-protocol" class="text-[11px] sm:text-xs font-black text-white leading-tight"></span>
+                </div>
+                <div class="flex flex-col items-center gap-0.5 py-3 px-2 text-center">
+                    <span class="text-[8px] font-black uppercase tracking-[.16em] text-teal-400">Rest</span>
+                    <span id="vp-rest" class="text-[11px] sm:text-xs font-black text-white leading-tight"></span>
+                </div>
+                <div class="flex flex-col items-center gap-0.5 py-3 px-2 text-center">
+                    <span class="text-[8px] font-black uppercase tracking-[.16em] text-teal-400">Tempo</span>
+                    <span id="vp-tempo" class="text-[11px] sm:text-xs font-black text-white leading-tight"></span>
+                </div>
+                <div class="flex flex-col items-center gap-0.5 py-3 px-2 text-center">
+                    <span class="text-[8px] font-black uppercase tracking-[.16em] text-teal-400">Load</span>
+                    <span id="vp-load" class="text-[11px] sm:text-xs font-black text-white leading-tight"></span>
+                </div>
+            </div>
+
+            
+            <div id="vp-nav"
+                 class="hidden flex items-center justify-between gap-3 bg-slate-950 px-5 py-3 border-t border-white/10">
+                <button onclick="vpNavPrev()"
+                        class="flex items-center gap-2 text-[10px] font-black text-white/70
+                               uppercase tracking-widest hover:text-white transition-colors">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                    Prev
+                </button>
+                <span id="vp-counter" class="text-[11px] font-black text-teal-400 tracking-widest"></span>
+                <button onclick="vpNavNext()"
+                        class="flex items-center gap-2 text-[10px] font-black text-white/70
+                               uppercase tracking-widest hover:text-white transition-colors">
+                    Next
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

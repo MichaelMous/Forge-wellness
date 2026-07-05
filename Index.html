@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FORGE Wellness | Exercises & Meal Plans</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">  
+    <script src="script.js"></script>  
+
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+
+</head>
+<body class="font-sans bg-white antialiased selection:bg-vibrant selection:text-white">    
+    
+    
+    <div id="portal-screen">
+        
+        <div id="split-wrapper">
+            <div class="split-half border-r border-white/20">
+                <div class="split-overlay"></div>
+                <img src="Images/gym.jpg" alt="Gym Workout" class="w-full h-full object-cover">
+            </div>
+            
+            <div class="split-half">
+                <div class="split-overlay"></div>
+                <img src="Images/healthybowl.jpg" alt="Healthy Meal" class="w-full h-full object-cover">
+            </div>
+        </div>
+
+<div class="glass-box relative z-30 text-center px-6 py-10 md:px-12 max-w-3xl w-full bg-white/10 backdrop-blur-3xl border border-white/20 rounded-[3rem] shadow-[0_40px_100px_rgba(0,0,0,0.4)] mx-4 overflow-hidden">
+    
+    <div id="glow-bg" class="absolute -top-24 -left-24 w-64 h-64 bg-vibrant/20 rounded-full blur-[80px] transition-all duration-700 pointer-events-none"></div>
+
+    <div class="relative z-10">
+        <h1 class="font-display font-black text-4xl md:text-6xl tracking-tighter mb-1 text-slateDark">
+            FORGE<span class="text-vibrant">.</span>
+        </h1>
+        <p class="text-slateDark/90 font-bold uppercase tracking-[0.4em] text-[10px] mb-10">Precision Wellness Architecture</p>
+
+        <div class="relative flex bg-slateDark/5 p-1 rounded-full max-w-sm mx-auto mb-8 border border-slateDark/10">
+            <div id="nav-indicator" class="absolute top-1 bottom-1 left-1 w-[32%] bg-white rounded-full shadow-md transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)]"></div>
+            
+            <button onclick="updateMode(0, 'fuel')" class="relative z-10 flex-1 py-2.5 text-[10.5px] font-black uppercase tracking-widest text-slateDark transition-colors duration-500">Meal Plan</button>
+            <button onclick="updateMode(1, 'hybrid')" class="relative z-10 flex-1 py-2.5 text-[10.5px] font-black uppercase tracking-widest text-slateDark transition-colors duration-500">Both</button>
+            <button onclick="updateMode(2, 'power')" class="relative z-10 flex-1 py-2.5 text-[10.5px] font-black uppercase tracking-widest text-slateDark transition-colors duration-500">Gym</button>
+        </div>
+
+        <div class="min-h-[120px] flex flex-col justify-center mb-6">
+            <div id="mode-text-container" class="transition-all duration-500 transform">
+                <h2 id="mode-title" class="font-display font-bold text-xl md:text-2xl text-slateDark mb-3 uppercase tracking-tight">Optimize Nutrition</h2>
+                <p id="mode-description" class="text-[14.5px] text-slateDark/70 max-w-xs mx-auto leading-relaxed font-semibold">
+                    The complete synergy of elite gym programming and metabolic fueling.
+                </p>
+            </div>
+        </div>
+        
+        <div class="magnetic-wrap" id="mag-btn-wrap">
+            <button onclick="enterMainSite()" class="magnetic-btn bg-slateDark text-white px-12 py-4 rounded-full font-display text-[10px] font-black uppercase tracking-[0.3em] hover:bg-vibrant transition-all shadow-2xl">
+                Initialize Access
+            </button>
+        </div>
+    </div>
+</div>
+    </div>
+
+
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   <script>
+    
+    function selectProtocol(type) {
+    const portal = document.getElementById('portal-screen');
+    const authPill = document.getElementById('auth-pill');
+
+    
+    if (authPill) authPill.style.display = 'none';
+
+    
+    portal.style.opacity = '0';
+    portal.style.transform = 'scale(1.05)'; 
+
+    
+    setTimeout(() => {
+        if (type === 'gym') window.location.href = 'gym-exercises.html';
+        if (type === 'meal') window.location.href = 'Instopt.html';
+    }, 600); 
+}
+
+    const modes = {
+        fuel: {
+            title: "Optimize Nutrition",
+            description: "Customized healthy meal plans and metabolic optimization.",
+            glow: "translate(-20%, -20%)"
+        },
+        hybrid: {
+            title: "Total Transformation",
+            description: "The complete synergy of elite gym programming and metabolic fueling.",
+            glow: "translate(50%, -20%)"
+        },
+        power: {
+            title: "Workout Library",
+            description: "High-performance strength routines and muscle architecture.",
+            glow: "translate(120%, -20%)"
+        }
+    };
+
+    let currentSelection = 'fuel';   
+
+    function updateMode(index, key) {
+        currentSelection = key;
+
+        const indicator = document.getElementById('nav-indicator');
+        const container = document.getElementById('mode-text-container');
+        const glow = document.getElementById('glow-bg');
+
+        let moveX = index * 103;
+        if (index === 0) moveX = 0;
+
+        indicator.style.transform = `translateX(${moveX}%)`;
+        glow.style.transform = modes[key].glow;
+
+        container.style.opacity = '0';
+        container.style.transform = 'translateY(5px)';
+
+        setTimeout(() => {
+            document.getElementById('mode-title').innerText = modes[key].title;
+            document.getElementById('mode-description').innerText = modes[key].description;
+            container.style.opacity = '1';
+            container.style.transform = 'translateY(0)';
+        }, 300);
+    }
+
+    
+
+    
+
+function enterMainSite() {
+    const portal = document.getElementById('portal-screen');
+    const authPill = document.getElementById('auth-pill');
+    const glassBox = document.querySelector('.glass-box');
+
+    
+    if (authPill) {
+        authPill.style.transition = "opacity 0.2s ease";
+        authPill.style.opacity = '0';
+    }
+
+    
+    portal.style.transition = "opacity 0.9s cubic-bezier(0.25, 0.1, 0.25, 1)";
+    portal.style.opacity = '0';
+
+    if (glassBox) {
+        glassBox.style.transition = "all 0.75s cubic-bezier(0.23, 1, 0.32, 1)";
+        glassBox.style.opacity = '0';
+        glassBox.style.transform = 'scale(0.88) translateY(30px)';
+    }
+
+    
+    setTimeout(() => {
+        if (currentSelection === 'fuel') {
+            window.location.href = 'Instopt.html';
+        } else if (currentSelection === 'power') {
+            window.location.href = 'gym-exercises.html';
+        } else {
+            window.location.href = 'meal-gym.html';
+        }
+    }, 720);
+}
+
+    
+    const dietPills = document.querySelectorAll('.diet-pill');
+    dietPills.forEach(pill => {
+        pill.addEventListener('click', function() {
+            dietPills.forEach(p => p.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
+
+    
+    const magBtnWrap = document.getElementById('mag-btn-wrap');
+    const magBtn = magBtnWrap.querySelector('.magnetic-btn');
+
+    magBtnWrap.addEventListener('mousemove', (e) => {
+        const rect = magBtnWrap.getBoundingClientRect();
+        magBtn.classList.remove('returning');
+
+        const h = rect.width / 2;
+        const v = rect.height / 2;
+        const mouseX = e.clientX - rect.left - h;
+        const mouseY = e.clientY - rect.top - v;
+
+        const moveX = mouseX * 0.45;
+        const moveY = mouseY * 0.45;
+
+        magBtn.style.transform = `translate(${moveX}px, ${moveY}px)`;
+    });
+
+    magBtnWrap.addEventListener('mouseleave', () => {
+        magBtn.classList.add('returning');
+        magBtn.style.transform = 'translate(0px, 0px)';
+    });
+
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

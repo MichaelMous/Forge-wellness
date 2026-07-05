@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DietPro | Bodybuilding Mass Gain Premium Presentation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        
+        :root {
+            --primary: #f97316; 
+            --accent: #ea580c;  
+            --darker: #060402;
+            --white: #ffffff;
+            --text-muted: #94a3b8;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --border: rgba(249, 115, 22, 0.15);
+            
+            
+            --quote-bg-img: url('https://images.unsplash.com/photo-1517838277536-f5f99be501cd?q=80&w=1200');
+            --quote-overlay: rgba(6, 4, 2, 0.93);
+            --quote-text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        
+        body.light-mode {
+            --darker: #fbf9f6;
+            --white: #1a1a1a;
+            --text-muted: #4b5563;
+            --card-bg: #ffffff;
+            --border: #fed7aa;
+            
+            
+            --quote-bg-img: url('https://images.unsplash.com/photo-1517838277536-f5f99be501cd?q=80&w=1200');
+            --quote-overlay: rgba(251, 249, 246, 0.85);
+            --quote-text-shadow: 0 1px 4px rgba(255,255,255,0.8);
+        }
+
+        
+        * { 
+            box-sizing: border-box; 
+            font-family: 'Inter', sans-serif !important;
+        }
+
+        
+        .fas, .far, .fab, .fa {
+            font-family: 'Font Awesome 6 Free', 'Font Awesome 6 Brands' !important;
+            font-weight: 900 !important;
+        }
+        
+        h1, h2, h3, h4, .logo {
+            font-family: 'Sora', sans-serif !important;
+        }
+        
+        body {
+            margin: 0; 
+            padding: 0;
+            background-color: var(--darker);
+            color: var(--white);
+            font-weight: 600; 
+            transition: background-color 0.5s ease, color 0.5s ease;
+            overflow-x: hidden;
+        }
+
+        
+        .navbar {
+            position: fixed; top: 0; width: 100%; z-index: 1000;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px 8%; background: rgba(6, 4, 2, 0.85);
+            backdrop-filter: blur(10px); transition: all 0.3s ease;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+        body.light-mode .navbar {
+            background: rgba(251, 249, 246, 0.9);
+            border-bottom: 1px solid var(--border);
+        }
+        .navbar.navbar-clean { justify-content: center; }
+        .logo { font-size: 24px; font-weight: 800; letter-spacing: -0.04em; color: var(--white); text-decoration: none; }
+        .logo span { color: var(--primary); }
+        a.logo:hover { opacity: 0.85; }
+        .nav-links { display: flex; align-items: center; gap: 30px; }
+        .nav-links a { color: var(--white); text-decoration: none; font-weight: 700; font-size: 15px; }
+
+        
+        .mode-switch {
+            width: 60px; height: 30px; background: #1e293b;
+            border-radius: 15px; position: relative; cursor: pointer;
+            border: 2px solid var(--primary); transition: all 0.3s ease;
+        }
+        body.light-mode .mode-switch { background: #cbd5e1; }
+        .switch-ball {
+            width: 24px; height: 24px; background: var(--white);
+            border-radius: 50%; position: absolute; top: 1px; left: 2px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 14px; transition: all 0.3s ease;
+        }
+        body.light-mode .switch-ball { left: 30px; background: #0f172a; }
+
+        
+        .presentation-container {
+            max-width: 1200px;
+            margin: 120px auto 60px auto;
+            padding: 0 20px;
+            display: grid;
+            gap: 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .slide-container {
+            width: 100%; 
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 40px; 
+            position: relative;
+            overflow: hidden; 
+            border-radius: 24px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+        body.light-mode .slide-container {
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+
+        h1, h2, h3 { color: var(--white); margin: 0; }
+        
+        .slide-title { 
+            font-size: 30px; 
+            font-weight: 700;
+            margin-bottom: 25px; 
+            border-left: 5px solid var(--primary); 
+            padding-left: 15px; 
+            border-radius: 4px;
+        }
+
+        
+        .grid-2-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: center; }
+        .grid-3-columns { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        @media (max-width: 768px) { .grid-2-columns, .grid-3-columns { grid-template-columns: 1fr; } }
+
+        
+        .info-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 25px;
+            border-radius: 20px; 
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        .info-card i { font-size: 38px; color: var(--primary); margin-bottom: 15px; display: inline-block; }
+        
+        
+        .table-layout table { 
+            width: 100%; border-collapse: collapse; background: var(--card-bg); 
+            border-radius: 18px; overflow: hidden; margin-top: 15px;
+        }
+        .table-layout th, .table-layout td { padding: 14px; text-align: left; border-bottom: 1px solid var(--border); }
+        .table-layout th { background: rgba(249, 115, 22, 0.1); color: var(--primary); font-weight: 700; }
+        body.light-mode .table-layout th { background: rgba(249, 115, 22, 0.08); color: var(--accent); }
+
+        
+        .accordion-item { 
+            background: var(--card-bg); border: 1px solid var(--border); 
+            border-radius: 18px; margin-bottom: 14px; padding: 15px 20px; 
+        }
+        .accordion-header { 
+            display: flex; justify-content: space-between; align-items: center; 
+            cursor: pointer; font-size: 1.1rem; font-weight: 700;
+        }
+        .accordion-header i { color: var(--primary); transition: transform 0.3s ease; }
+        .accordion-content { 
+            max-height: 0; overflow: hidden; transition: max-height 0.5s ease-out; 
+            color: var(--text-muted); font-size: 16px;
+        }
+        .accordion-item.active .accordion-content { max-height: 1500px; margin-top: 10px; }
+        .accordion-item.active .accordion-header i { transform: rotate(180deg); }
+
+        
+        .doughnut-chart-container { display: flex; align-items: center; gap: 40px; justify-content: center; }
+        .doughnut { 
+            width: 200px; height: 200px; border-radius: 50%; 
+            background: conic-gradient(var(--primary) 0% 40%, #818cf8 40% 75%, #fbbf24 75% 100%); 
+        }
+        .highlight-num { font-size: 95px; font-weight: 700; color: var(--primary); line-height: 1; letter-spacing: -2px; }
+    </style>
+<style id="embed-style">
+
+body.embed-mode .navbar, body.embed-mode .site-footer { display: none !important; }
+body.embed-mode { padding-top: 0 !important; }
+body.embed-mode .results-wrapper, body.embed-mode main, body.embed-mode .container { padding-top: 24px !important; }
+</style>
+<script>
+(function(){
+  try {
+    var p = new URLSearchParams(window.location.search);
+    if (p.get('embed') === '1') {
+      document.addEventListener('DOMContentLoaded', function(){
+        document.body.classList.add('embed-mode');
+      });
+    }
+  } catch(e){}
+})();
+</script>
+<style id="print-expand">
+@media print {
+  
+  .accordion-content { max-height: none !important; overflow: visible !important; margin-top: 10px !important; }
+  .accordion-item .accordion-header i { transform: rotate(180deg) !important; }
+  .navbar, .site-footer { display: none !important; }
+}
+</style>
+</head>
+<body>
+
+<nav class="navbar navbar-clean">
+    <a href="Instopt.html" class="logo">FORGE<span>.</span></a>
+</nav>
+
+<div class="presentation-container">
+
+    <div class="slide-container" style="text-align: center; padding: 60px 20px;">
+        <span style="color: var(--primary); font-weight: 700; letter-spacing: 2px;">ANABOLIC MASS STRATEGY</span>
+        <h1 style="font-size: 55px; margin-top: 10px; font-weight: 700;" id="main-title">Loading...</h1>
+        <p style="font-size: 20px; color: var(--text-muted);" id="main-subtitle">Targeted hypertrophy and lean muscle mass gains.</p>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title" id="dynamic-diet-title"><i class="fas fa-spinner fa-spin"></i> Loading your programme...</h2>
+        <div id="dynamic-accordion-container"></div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Data Analysis & Multiplier</h2>
+        <div class="grid-2-columns">
+            <div style="text-align: center;">
+                <div class="highlight-num" id="multiplier-badge">1.0x</div>
+                <p style="font-size: 18px; font-weight: 700;">Quantity Multiplier</p>
+            </div>
+            <div>
+                <h3 style="font-weight: 700;">Precision Adjustment</h3>
+                <p style="color: var(--text-muted); line-height: 1.6; font-size: 16px;" id="multiplier-reason">
+                    The plan your has optimised with base the personal your details for the maximum anabolic response.
+                </p>
+                <p style="font-size: 16px;"><i class="fas fa-check-circle" style="color: var(--primary); margin-right: 8px;"></i> Calorie Surplus</p>
+                <p style="font-size: 16px;"><i class="fas fa-check-circle" style="color: var(--primary); margin-right: 8px;"></i> Maximum Protein Synthesis</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Mass-Building Tips for Success</h2>
+        <div class="grid-3-columns">
+            <div class="info-card">
+                <i class="fas fa-dumbbell"></i>
+                <h3 style="font-weight: 700;">Progressive Overload</h3>
+                <p style="color: var(--text-muted); font-size: 14px; line-height: 1.5;">If you don't increase the weight or reps in the gym, the extra calories turn into fat instead of muscle.</p>
+            </div>
+            <div class="info-card">
+                <i class="fas fa-bed"></i>
+                <h3 style="font-weight: 700;">Anabolic Sleep</h3>
+                <p style="color: var(--text-muted); font-size: 14px; line-height: 1.5;">Muscles grow when you rest. Ensure 7-8 hours of quality sleep for maximum growth-hormone secretion.</p>
+            </div>
+            <div class="info-card">
+                <i class="fas fa-utensils"></i>
+                <h3 style="font-weight: 700;">Meal Consistency</h3>
+                <p style="color: var(--text-muted); font-size: 14px; line-height: 1.5;">Don't skip meals. During a bulk, a systematic supply of amino acids and glycogen is the key.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Statistical Plan Analysis (Hypertrophy)</h2>
+        <div class="grid-2-columns">
+            <div class="doughnut-chart-container">
+                <div class="doughnut"></div>
+                <div style="font-size: 15px; font-weight: 700;">
+                    <p style="color: var(--primary); margin: 8px 0;">● Quality Carbohydrates (40%)</p>
+                    <p style="color: #818cf8; margin: 8px 0;">● Lean Protein (35%)</p>
+                    <p style="color: #fbbf24; margin: 8px 0;">● Beneficial Fats (25%)</p>
+                </div>
+            </div>
+            <div style="text-align: center;">
+                <h3 style="font-size: 1rem; margin-bottom: 10px; font-weight: 700;">Muscle Growth Projection</h3>
+                <svg viewBox="0 0 1000 250" style="width: 100%; height: auto; max-height: 140px;">
+                    <path d="M0,220 Q250,190 500,100 T1000,20 L1000,250 L0,250 Z" fill="rgba(249, 115, 22, 0.1)" stroke="var(--primary)" stroke-width="5" stroke-linecap="round"/>
+                    <circle cx="500" cy="100" r="8" fill="var(--primary)" />
+                </svg>
+                <p style="color: var(--text-muted); font-size: 14px; margin-top: 8px;"><i class="fas fa-chart-line"></i> Controlled, steady strength gains without fat retention</p>
+            </div>
+        </div>
+    </div>
+
+    
+
+</div>
+
+<script>
+const massGainDatabase = {
+    female: {
+        title: "Bulk & Hypertrophy Programme (Female – Lean Bulk)",
+        weeks: {
+            "Week 1: Anabolic Ignition": [
+                { day: "Monday", breakfast: "3 eggs (2 egg whites), 60g oats, 1 tbsp honey, 1 handful berries", lunch: "130g chicken breast, 150g basmati rice, 1 tbsp olive oil, asparagus", snack: "150g Yogurt 2%, 30g walnuts, 1 banana" },
+                { day: "Tuesday", breakfast: "2 slices whole-grain bread, 1/2 avocado, 2 boiled eggs", lunch: "140g Patties turkey, 180g sweet potato, seasonal salad with oil", snack: "1 scoop protein whey, 40g Cream of Rice, cinnamon" },
+                { day: "Wednesday", breakfast: "Smoothie: 1 scoop whey, 50g oats, 1 tbsp peanut butter, almond milk", lunch: "140g Beef fillet, 150g quinoa, green salad with avocado", snack: "2 rice cakes with tahini, honey & 1 boiled egg" },
+                { day: "Thursday", breakfast: "Omelette with 3 whole eggs & spinach, 2 slices rye bread", lunch: "160g White fish (or salmon), 180g potato boiled, boiled greens", snack: "150g Cottage cheese, 15 almonds, 1 apple" },
+                { day: "Friday", breakfast: "60g oats porridge with milk, 1 scoop whey, 10 cashews", lunch: "130g chicken breast, 150g whole-grain pasta, sauce tomato", snack: "1 yogurt 2% with 30g granola & 1 tbsp flaxseed" },
+                { day: "Saturday", breakfast: "Pancakes: 1 egg + 3 egg whites, 50g oat flour, syrup agave", lunch: "150g Tuna (in water), 150g rice, salad with olives", snack: "1 protein bar & 1 juice orange" },
+                { day: "Sunday", breakfast: "3 scrambled eggs, 2 slices whole-grain bread, cherry tomatoes", lunch: "Controlled Cheat: 1 portion homemade meal (e.g. pastitsio or meat baked)", snack: "1 handful mixed nuts & dried figs" }
+            ],
+            "Week 2: Muscle Loading": [
+                { day: "Monday", breakfast: "3 eggs whole, 70g oats, 1 banana", lunch: "140g Chicken, 180g basmati rice, broccoli", snack: "1 scoop whey & 40g Cream of Rice with peanut butter" },
+                { day: "Tuesday", breakfast: "2 slices whole-grain bread, 1/2 avocado, 3 boiled eggs", lunch: "150g Patties beef, 200g sweet potato, salad", snack: "150g Yogurt 2%, 35g walnuts, honey" },
+                { day: "Wednesday", breakfast: "Smoothie: 1 scoop whey, 60g oats, 1 tbsp tahini, whole milk", lunch: "160g Salmon grilled, 160g quinoa, asparagus", snack: "1 toast whole-grain with light cheese & turkey + 1 egg" },
+                { day: "Thursday", breakfast: "4 eggs omelette, 1 sesame bread ring (Thessaloniki-style), 8 olives", lunch: "150g turkey fillet, 180g rice, green salad", snack: "180g Cottage cheese & 1 large green apple" },
+                { day: "Friday", breakfast: "70g Cream of Rice with 1.5 scoop whey & cinnamon", lunch: "140g Pork tenderloin, 220g baked potato, salad", snack: "1 scoop whey & 3 rice cakes with honey" },
+                { day: "Saturday", breakfast: "4 scrambled eggs, 2 slices bread, tomato", lunch: "160g Whole-grain pasta with 120g lean beef mince", snack: "1 yogurt whole (full-fat) with 40g granola" },
+                { day: "Sunday", breakfast: "Oat pancakes with 2 eggs, honey and fruit", lunch: "Mass Re-feed: Patties with fries & salad", snack: "1 handful cashews & dark chocolate" }
+            ],
+            "Week 3: Hypertrophic Peak": [
+                { day: "Monday", breakfast: "4 eggs (2 whole), 80g oats, 1 tbsp honey", lunch: "150g Chicken, 200g rice, 1 tbsp olive oil", snack: "1.5 scoop whey, 1 banana, 30g almonds" },
+                { day: "Tuesday", breakfast: "3 slices whole-grain bread, 1/2 avocado, 3 boiled eggs", lunch: "160g Beef lean, 220g sweet potato, salad", snack: "200g Yogurt 2%, 40g oats, walnuts" },
+                { day: "Wednesday", breakfast: "Smoothie: 1.5 scoop whey, 70g oats, 1.5 tbsp peanut butter", lunch: "180g White fish, 180g quinoa, steamed vegetables", snack: "2 toast whole-grain with cheese & turkey" },
+                { day: "Thursday", breakfast: "4 eggs omelette, 1 large sesame bread ring, 10 olives", lunch: "160g Turkey fillet, 200g rice, salad", snack: "200g Cottage cheese & 2 rice cakes with honey" },
+                { day: "Friday", breakfast: "80g Cream of Rice with 1.5 scoop whey", lunch: "150g Pork tenderloin, 250g roasted potatoes", snack: "1 scoop whey & 1 banana + 20g cashews" },
+                { day: "Saturday", breakfast: "5 eggs (3 whole) scrambled, 3 slices bread", lunch: "180g Whole-grain pasta with 140g ground meat & cheese", snack: "Smoothie with milk, banana and hazelnut butter" },
+                { day: "Sunday", breakfast: "Pancakes (3 eggs, oats, honey, peanut butter)", lunch: "Mass Re-feed: 1 large homemade Burger with potatoes", snack: "1 handful mixed nuts" }
+            ],
+            "Week 4: Consolidation": [
+                { day: "Monday", breakfast: "3 eggs whole, 65g oats, berries", lunch: "140g Chicken, 160g basmati rice, broccoli", snack: "1 scoop whey, 1 banana, 20g almonds" },
+                { day: "Tuesday", breakfast: "2 slices whole-grain bread, 1/2 avocado, 2 boiled eggs", lunch: "140g Patties turkey, 180g sweet potato", snack: "150g Yogurt 2% with granola & honey" },
+                { day: "Wednesday", breakfast: "Smoothie: 1 scoop whey, 50g oats, 1 tbsp peanut butter", lunch: "150g Salmon, 150g quinoa, salad", snack: "1 toast whole-grain with cheese & turkey + 1 egg" },
+                { day: "Thursday", breakfast: "4 eggs omelette, 1 sesame bread ring (Thessaloniki-style)", lunch: "140g Turkey fillet, 160g rice, greens", snack: "150g Cottage cheese & 1 apple" },
+                { day: "Friday", breakfast: "70g Cream of Rice with 1.5 scoop whey", lunch: "140g Pork tenderloin, 200g baked potato", snack: "1 scoop whey & 2 rice cakes with tahini" },
+                { day: "Saturday", breakfast: "4 scrambled eggs, 2 slices whole-grain bread", lunch: "160g pasta with 120g beef mince", snack: "1 yogurt whole (full-fat) & 30g walnuts" },
+                { day: "Sunday", breakfast: "Hearty breakfast with eggs & oat pancakes", lunch: "Controlled Cheat: Meal of choice without excess", snack: "1 handful nuts" }
+            ]
+        }
+    },
+    male: {
+        title: "Bulk & Hypertrophy Programme (Male – Hardcore Mass Bulk)",
+        weeks: {
+            "Week 1: Foundation Building": [
+                { day: "Monday", breakfast: "5 eggs whole, 100g oats with milk, 2 tbsp honey, 1 banana", lunch: "200g chicken breast, 250g basmati rice, 1.5 tbsp olive oil, broccoli", snack: "2 scoop whey, 60g Cream of Rice, 1 tbsp peanut butter" },
+                { day: "Tuesday", breakfast: "3 slices whole-grain bread, 1 whole avocado, 4 boiled eggs", lunch: "220g Beef patties, 300g baked potato, large salad with oil", snack: "200g Yogurt 5%, 50g oats, 40g walnuts, honey" },
+                { day: "Wednesday", breakfast: "Smoothie: 2 scoop whey, 80g oats, 2 tbsp tahini, 1 banana, whole milk", lunch: "220g Salmon grilled, 200g quinoa, boiled greens with olive oil", snack: "2 toast whole-grain with double cheese & turkey + 2 boiled eggs" },
+                { day: "Thursday", breakfast: "5 eggs omelette, 1.5 sesame bread ring (Thessaloniki-style), 15 olives, tomato", lunch: "220g turkey fillet, 250g rice, green salad with avocado", snack: "250g Cottage cheese, 30g almonds, 1 large apple" },
+                { day: "Friday", breakfast: "100g Cream of Rice with 2 scoop whey, cinnamon & 15 cashews", lunch: "220g Pork tenderloin, 300g sweet potato grilled, salad", snack: "2 scoop whey & 4 rice cakes with tahini & honey" },
+                { day: "Saturday", breakfast: "6 scrambled eggs, 3 slices rustic bread, cherry tomatoes", lunch: "250g Whole-grain pasta with 180g beef mince & plenty of cheese", snack: "Smoothie: Whole (full-fat) milk, 1 banana, 30g hazelnut butter" },
+                { day: "Sunday", breakfast: "Pancakes: 3 eggs + 3 egg whites, 80g oat flour, plenty of syrup, fruit", lunch: "Clean Re-feed: 2 large homemade Burgers with baked potatoes", snack: "1 large handful mixed nuts & dried figs" }
+            ],
+            "Week 2: Heavy Load Phase": [
+                { day: "Monday", breakfast: "6 eggs whole, 120g oats, 2 bananas", lunch: "250g Chicken, 300g basmati rice, salad", snack: "2 scoop whey & 80g Cream of Rice with peanut butter" },
+                { day: "Tuesday", breakfast: "4 slices bread, 1 avocado, 5 boiled eggs", lunch: "250g Beef, 350g potatoes, large salad", snack: "250g Yogurt 5%, 60g oats, 50g walnuts" },
+                { day: "Wednesday", breakfast: "Smoothie: 2.5 scoop whey, 100g oats, 2 tbsp tahini, milk", lunch: "250g Salmon, 250g quinoa, asparagus", snack: "3 toast with cheese & turkey + 2 eggs" },
+                { day: "Thursday", breakfast: "6 eggs omelette, 2 sesame bread rings (Thessaloniki-style), 20 olives", lunch: "250g Turkey, 300g rice, salad", snack: "300g Cottage cheese, 1 apple, 30g almonds" },
+                { day: "Friday", breakfast: "120g Cream of Rice with 2 scoop whey & 20 cashews", lunch: "250g Pork tenderloin, 350g sweet potato", snack: "2 scoop whey & 5 rice cakes with honey" },
+                { day: "Saturday", breakfast: "7 scrambled eggs, 4 slices whole-grain bread", lunch: "300g Pasta with 200g ground meat & extra parmesan", snack: "1 large bowl yogurt 5% with 60g granola" },
+                { day: "Sunday", breakfast: "Pancakes (4 eggs, 100g oats, honey, peanut butter)", lunch: "Mass Re-feed: Pastitsio or Moussaka (large portion)", snack: "1 handful nuts & 1 sesame bar" }
+            ],
+            "Week 3: Anabolic Peak (Max Surplus)": [
+                { day: "Monday", breakfast: "6 eggs omelette, 140g oats, 2 tbsp honey", lunch: "300g Chicken, 350g rice, vegetables", snack: "2.5 scoop whey & 1 large banana + 40g almonds" },
+                { day: "Tuesday", breakfast: "4 slices bread, 1 avocado, 6 boiled eggs", lunch: "300g Beef, 400g potatoes, broccoli", snack: "Yogurt 5%, 80g oats, 60g walnuts" },
+                { day: "Wednesday", breakfast: "Smoothie: 2.5 scoop whey, 120g oats, milk, 2 tbsp peanut butter", lunch: "300g Fish or Salmon, 300g quinoa, greens", snack: "3 toast with turkey & cheese + 2 eggs" },
+                { day: "Thursday", breakfast: "7 fried eggs, 3 slices bread, 1 large piece graviera cheese", lunch: "300g Turkey, 350g rice, salad", snack: "300g Cottage cheese & 3 rice cakes with tahini" },
+                { day: "Friday", breakfast: "130g Cream of Rice with 2.5 scoop whey", lunch: "300g Pork tenderloin, 400g sweet potato", snack: "2 scoop whey, 1 banana, 30g cashews" },
+                { day: "Saturday", breakfast: "8 eggs (5 whole), 5 slices bread", lunch: "350g Pasta with 220g ground meat & plenty of cheese", snack: "Smoothie: Milk, 3 tbsp peanut butter, 1 apple, oats" },
+                { day: "Sunday", breakfast: "Pancakes (double hardcore serving with eggs and honey)", lunch: "Mass Cheat: Double Bacon Cheeseburger with fries", snack: "1 handful cashews & 1 chocolate" }
+            ],
+            "Week 4: Consolidation & Recovery": [
+                { day: "Monday", breakfast: "5 eggs whole, 90g oats, 1 banana", lunch: "220g Chicken, 250g rice, salad", snack: "2 scoop whey, 1 banana, 30g almonds" },
+                { day: "Tuesday", breakfast: "3 slices bread, 1/2 avocado, 4 boiled eggs", lunch: "220g Beef, 300g potatoes, broccoli", snack: "Yogurt 5% with 50g granola & honey" },
+                { day: "Wednesday", breakfast: "Smoothie: 2 scoop whey, 80g oats, honey, milk", lunch: "250g Fish, 200g quinoa, salad", snack: "2 toast with turkey & cheese + 1 egg" },
+                { day: "Thursday", breakfast: "6 scrambled eggs, 1.5 sesame bread ring (Thessaloniki-style)", lunch: "220g Turkey, 250g rice, greens", snack: "250g Cottage cheese & 5 walnuts" },
+                { day: "Friday", breakfast: "100g Cream of Rice with 2 scoop whey", lunch: "220g Pork tenderloin, 300g sweet potato", snack: "1.5 scoop whey & 1 banana" },
+                { day: "Saturday", breakfast: "6 fried eggs, 3 slices bread, olives", lunch: "300g Whole-grain pasta with beef mince", snack: "1 handful nuts & 1 fruit" },
+                { day: "Sunday", breakfast: "Hearty free breakfast & meal reset", lunch: "Clean Re-feed: Meat baked with potatoes & salad", snack: "1 sesame bar & nuts" }
+            ]
+        }
+    }
+};
+
+
+function toggleTheme() {
+    const body = document.body;
+    const modeIcon = document.getElementById('mode-icon');
+    body.classList.toggle('light-mode');
+    const isLight = body.classList.contains('light-mode');
+    if (modeIcon) modeIcon.innerHTML = isLight ? "\u2600\ufe0f" : "\ud83c\udf19";
+    try { localStorage.setItem('theme', isLight ? 'light' : 'dark'); } catch (e) {}
+}
+
+try {
+    if (localStorage.getItem('theme') === 'light') {
+        document.body.classList.add('light-mode');
+        var __mi = document.getElementById('mode-icon');
+        if (__mi) __mi.innerHTML = "\u2600\ufe0f";
+    }
+} catch (e) {}
+
+
+function toggleAccordion(headerElement) {
+    const currentItem = headerElement.parentElement;
+    const isActive = currentItem.classList.contains('active');
+    
+    document.querySelectorAll('.accordion-item').forEach(item => {
+        item.classList.remove('active');
+    });
+    
+    if (!isActive) {
+        currentItem.classList.add('active');
+    }
+}
+
+
+window.onload = function() {
+    const params = new URLSearchParams(window.location.search);
+    const goal = params.get('goal');       
+    const urlGender = params.get('gender'); 
+    const w = parseFloat(params.get('w'));
+    const h = parseFloat(params.get('h'));
+    
+    const titleElement = document.getElementById('dynamic-diet-title');
+    const mainTitle = document.getElementById('main-title');
+    const accordionContainer = document.getElementById('dynamic-accordion-container');
+    
+    const genderKey = urlGender === 'male' ? 'male' : (urlGender === 'female' ? 'female' : null);
+
+    if (!genderKey || !w || !h || !massGainDatabase[genderKey]) {
+        titleElement.innerHTML = "<i class='fas fa-exclamation-triangle'></i> Data Error";
+        accordionContainer.innerHTML = "<p style='text-align:center; color:var(--text-muted);'>No personal details found. Please return to the home page and fill in the form.</p>";
+        return;
+    }
+
+    const data = massGainDatabase[genderKey];
+    mainTitle.innerText = "Mass Gain Plan";
+    titleElement.innerHTML = `<i class="fas fa-dumbbell"></i> ${data.title}`;
+    
+    
+    let multiplier = (w > 80 || h > 180) ? 1.2 : 1.0;
+    
+    document.getElementById('multiplier-badge').innerText = multiplier + "x";
+    if (multiplier > 1.0) {
+        document.getElementById('multiplier-reason').innerHTML = `Based on your body type (Weight: ${w}kg, Height: ${h}cm), the gram (g) amounts have been automatically increased by 20% to ideally support your muscle development.`;
+    }
+    
+    let accordionHtml = '';
+    let weekIndex = 0;
+
+    for (let week in data.weeks) {
+        let activeClass = (weekIndex === 0) ? 'active' : '';
+        
+        accordionHtml += `
+            <div class="accordion-item ${activeClass}">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span><i class="fas fa-calendar-alt" style="margin-right: 10px;"></i> ${week}</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="accordion-content table-layout">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Day</th>
+                                <th>Breakfast</th>
+                                <th>Lunch</th>
+                                <th>Snack</th>
+                            </tr>
+                        </thead>
+                        <tbody>`;
+
+        data.weeks[week].forEach(day => {
+            let lunchText = day.lunch;
+            let breakfastText = day.breakfast;
+            let snackText = day.snack;
+            
+            
+            if (multiplier > 1.0) {
+                const replaceGrams = function(match, grams) {
+                    return Math.round(parseInt(grams) * multiplier) + "g";
+                };
+                breakfastText = breakfastText.replace(/(\d+)g/g, replaceGrams);
+                lunchText = lunchText.replace(/(\d+)g/g, replaceGrams);
+                snackText = snackText.replace(/(\d+)g/g, replaceGrams);
+            }
+
+            accordionHtml += `
+                <tr>
+                    <td><strong>${day.day}</strong></td>
+                    <td>${breakfastText}</td>
+                    <td>${lunchText}</td>
+                    <td>${snackText}</td>
+                </tr>`;
+        });
+
+        accordionHtml += `
+                        </tbody>
+                    </table>
+                </div>
+            </div>`;
+        weekIndex++;
+    }
+
+    accordionContainer.innerHTML = accordionHtml;
+};
+</script>
+
+    <style>
+    .site-footer {
+        width: 100%;
+        padding: 32px 0;
+        border-top: 1px solid rgba(148, 163, 184, 0.25);
+        margin-top: 60px;
+        background: transparent;
+    }
+    .site-footer-inner { text-align: center; }
+    .site-footer-logo {
+        font-family: 'Sora', sans-serif;
+        font-size: 1.125rem;
+        font-weight: 800;
+        letter-spacing: -0.04em;
+        margin: 0 0 4px;
+        color: inherit;
+    }
+    .site-footer-logo span { color: #00d2ff; }
+    .site-footer-tagline {
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        color: #94a3b8;
+        margin: 0 0 16px;
+    }
+    .site-footer-copy {
+        font-size: 12px;
+        font-weight: 500;
+        color: #94a3b8;
+        margin: 0;
+    }
+    </style>
+
+    <footer class="site-footer">
+        <div class="site-footer-inner">
+            <h2 class="site-footer-logo">FORGE<span>.</span></h2>
+            <p class="site-footer-tagline">Intelligent Training System</p>
+            <p class="site-footer-copy">&copy; 2026 FORGE. All rights reserved.</p>
+        </div>
+    </footer>
+
+
+<script>
+
+(function(){
+  try {
+    var p = new URLSearchParams(window.location.search);
+    if (p.get('embed') !== '1') return;
+    function reportHeight(){
+      var h = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
+      parent.postMessage({ forgeMealHeight: h }, '*');
+    }
+    window.addEventListener('load', function(){ reportHeight(); setTimeout(reportHeight, 600); });
+    
+    document.addEventListener('click', function(){ setTimeout(reportHeight, 100); setTimeout(reportHeight, 650); });
+  } catch(e){}
+})();
+</script>
+</body>
+</html>
