@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DietPro | Plant-Based Premium Presentation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        
+        :root {
+            --primary: #22c55e; 
+            --accent: #15803d; 
+            --darker: #05080a;
+            --white: #ffffff;
+            --text-muted: #94a3b8;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --border: rgba(34, 197, 94, 0.2);
+            
+            
+            --quote-bg-img: url('https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=1200');
+            --quote-overlay: rgba(5, 8, 10, 0.93);
+            --quote-text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        
+        body.light-mode {
+            --darker: #f0f4f0;
+            --white: #1a1a1a;
+            --text-muted: #4b5563;
+            --card-bg: #ffffff;
+            --border: #d1fae5;
+            
+            
+            --quote-bg-img: url('https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=1200');
+            --quote-overlay: rgba(240, 244, 240, 0.85);
+            --quote-text-shadow: 0 1px 4px rgba(255,255,255,0.8);
+        }
+
+        
+        * { 
+            box-sizing: border-box; 
+            font-family: 'Inter', sans-serif !important;
+        }
+
+        
+        .fas, .far, .fab, .fa {
+            font-family: 'Font Awesome 6 Free', 'Font Awesome 6 Brands' !important;
+            font-weight: 900 !important;
+        }
+        
+        h1, h2, h3, h4, .logo {
+            font-family: 'Sora', sans-serif !important;
+        }
+        
+        body {
+            margin: 0; 
+            padding: 0;
+            background-color: var(--darker);
+            color: var(--white);
+            font-weight: 600; 
+            transition: background-color 0.5s ease, color 0.5s ease;
+            overflow-x: hidden;
+        }
+
+        
+        .leaves-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 0;
+        }
+        .leaf {
+            position: absolute; width: 20px; height: 20px;
+            background: var(--primary);
+            opacity: 0.3;
+            border-radius: 0 100% 0 100%;
+            animation: fall linear infinite;
+        }
+        @keyframes fall {
+            0% { transform: translateY(-10vh) rotate(0deg); opacity: 0; }
+            20% { opacity: 0.4; }
+            100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+        }
+
+        
+        .navbar {
+            position: fixed; top: 0; width: 100%; z-index: 1000;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px 8%; background: rgba(5, 8, 10, 0.85);
+            backdrop-filter: blur(10px); transition: all 0.3s ease;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+        body.light-mode .navbar {
+            background: rgba(240, 244, 240, 0.9);
+            border-bottom: 1px solid var(--border);
+        }
+        .navbar.navbar-clean { justify-content: center; }
+        .logo { font-size: 24px; font-weight: 800; letter-spacing: -0.04em; color: var(--white); text-decoration: none; }
+        .logo span { color: var(--primary); }
+        a.logo:hover { opacity: 0.85; }
+        .nav-links { display: flex; align-items: center; gap: 30px; }
+        .nav-links a { color: var(--white); text-decoration: none; font-weight: 700; font-size: 15px; }
+
+        
+        .mode-switch {
+            width: 60px; height: 30px; background: #1e293b;
+            border-radius: 15px; position: relative; cursor: pointer;
+            border: 2px solid var(--primary); transition: all 0.3s ease;
+        }
+        body.light-mode .mode-switch { background: #cbd5e1; }
+        .switch-ball {
+            width: 24px; height: 24px; background: var(--white);
+            border-radius: 50%; position: absolute; top: 1px; left: 2px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 14px; transition: all 0.3s ease;
+        }
+        body.light-mode .switch-ball { left: 30px; background: #0f172a; }
+
+        
+        .presentation-container {
+            max-width: 1200px;
+            margin: 120px auto 60px auto;
+            padding: 0 20px;
+            display: grid;
+            gap: 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .slide-container {
+            width: 100%; 
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 40px; 
+            position: relative;
+            overflow: hidden; 
+            border-radius: 24px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+        body.light-mode .slide-container {
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+
+        h1, h2, h3 { color: var(--white); margin: 0; }
+        
+        .slide-title { 
+            font-size: 30px; 
+            font-weight: 700;
+            margin-bottom: 25px; 
+            border-left: 5px solid var(--primary); 
+            padding-left: 15px; 
+            border-radius: 4px;
+        }
+
+        
+        .grid-2-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: center; }
+        .grid-3-columns { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        @media (max-width: 768px) { .grid-2-columns, .grid-3-columns { grid-template-columns: 1fr; } }
+
+        
+        .info-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 25px;
+            border-radius: 20px; 
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        .info-card i { font-size: 38px; color: var(--primary); margin-bottom: 15px; display: inline-block; }
+        
+        
+        .table-layout table { 
+            width: 100%; border-collapse: collapse; background: var(--card-bg); 
+            border-radius: 18px; overflow: hidden; margin-top: 15px;
+        }
+        .table-layout th, .table-layout td { padding: 14px; text-align: left; border-bottom: 1px solid var(--border); }
+        .table-layout th { background: rgba(34, 197, 94, 0.1); color: var(--primary); font-weight: 700; }
+        body.light-mode .table-layout th { background: rgba(34, 197, 94, 0.08); color: var(--accent); }
+
+        
+        .accordion-item { 
+            background: var(--card-bg); border: 1px solid var(--border); 
+            border-radius: 18px; margin-bottom: 14px; padding: 15px 20px; 
+        }
+        .accordion-header { 
+            display: flex; justify-content: space-between; align-items: center; 
+            cursor: pointer; font-size: 1.1rem; font-weight: 700;
+        }
+        .accordion-header i { color: var(--primary); transition: transform 0.3s ease; }
+        .accordion-content { 
+            max-height: 0; overflow: hidden; transition: max-height 0.5s ease-out; 
+            color: var(--text-muted); font-size: 16px;
+        }
+        .accordion-item.active .accordion-content { max-height: 1500px; margin-top: 10px; }
+        .accordion-item.active .accordion-header i { transform: rotate(180deg); }
+
+        
+        .doughnut-chart-container { display: flex; align-items: center; gap: 40px; justify-content: center; }
+        .doughnut { 
+            width: 200px; height: 200px; border-radius: 50%; 
+            background: conic-gradient(var(--primary) 0% 50%, #818cf8 50% 80%, #fbbf24 80% 100%); 
+        }
+        .highlight-num { font-size: 95px; font-weight: 700; color: var(--primary); line-height: 1; letter-spacing: -2px; }
+    </style>
+<style id="embed-style">
+
+body.embed-mode .navbar, body.embed-mode .site-footer { display: none !important; }
+body.embed-mode { padding-top: 0 !important; }
+body.embed-mode .results-wrapper, body.embed-mode main, body.embed-mode .container { padding-top: 24px !important; }
+</style>
+<script>
+(function(){
+  try {
+    var p = new URLSearchParams(window.location.search);
+    if (p.get('embed') === '1') {
+      document.addEventListener('DOMContentLoaded', function(){
+        document.body.classList.add('embed-mode');
+      });
+    }
+  } catch(e){}
+})();
+</script>
+<style id="print-expand">
+@media print {
+  
+  .accordion-content { max-height: none !important; overflow: visible !important; margin-top: 10px !important; }
+  .accordion-item .accordion-header i { transform: rotate(180deg) !important; }
+  .navbar, .site-footer { display: none !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="leaves-container" id="leaves"></div>
+
+<nav class="navbar navbar-clean">
+    <a href="Instopt.html" class="logo">FORGE<span>.</span></a>
+</nav>
+
+<div class="presentation-container">
+
+    <div class="slide-container" style="text-align: center; padding: 60px 20px;">
+        <span style="color: var(--primary); font-weight: 700; letter-spacing: 2px;">PLANT POWER STRATEGY</span>
+        <h1 style="font-size: 55px; margin-top: 10px; font-weight: 700;" id="main-title">Loading...</h1>
+        <p style="font-size: 20px; color: var(--text-muted);" id="main-subtitle">Your personalised plant-based plan.</p>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title" id="dynamic-diet-title"><i class="fas fa-spinner fa-spin"></i> Loading your programme...</h2>
+        <div id="dynamic-accordion-container">
+            </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Data Analysis & Multiplier</h2>
+        <div class="grid-2-columns">
+            <div style="text-align: center;">
+                <div class="highlight-num" id="multiplier-badge">1.0x</div>
+                <p style="font-size: 18px; font-weight: 700;">Quantity Multiplier</p>
+            </div>
+            <div>
+                <h3 style="font-weight: 700;">Precision Adjustment</h3>
+                <p style="color: var(--text-muted); line-height: 1.6; font-size: 16px;" id="multiplier-reason">
+                    The plan your has optimised with base the personal your details.
+                </p>
+                <p style="font-size: 16px;"><i class="fas fa-check-circle" style="color: var(--primary); margin-right: 8px;"></i> Complete Amino-Acid Profile</p>
+                <p style="font-size: 16px;"><i class="fas fa-check-circle" style="color: var(--primary); margin-right: 8px;"></i> Optimal Absorption</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Vegan/Veggie Tips for Success</h2>
+        <div class="grid-3-columns">
+            <div class="info-card">
+                <i class="fas fa-seedling"></i>
+                <h3 style="font-weight: 700;">Protein</h3>
+                <p style="color: var(--text-muted); font-size: 14px; line-height: 1.5;">Combine legumes with rice to create a complete amino-acid profile in every meal.</p>
+            </div>
+            <div class="info-card">
+                <i class="fas fa-blender"></i>
+                <h3 style="font-weight: 700;">Smoothies</h3>
+                <p style="color: var(--text-muted); font-size: 14px; line-height: 1.5;">The quickest, easiest way to add "liquid" calories and vitamins.</p>
+            </div>
+            <div class="info-card">
+                <i class="fas fa-oil-can"></i>
+                <h3 style="font-weight: 700;">Healthy Fats</h3>
+                <p style="color: var(--text-muted); font-size: 14px; line-height: 1.5;">Add 1-2 tbsp of extra-virgin olive oil or avocado at the end of your meals.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Statistical Plan Analysis (Plant-Based)</h2>
+        <div class="grid-2-columns">
+            <div class="doughnut-chart-container">
+                <div class="doughnut"></div>
+                <div style="font-size: 15px; font-weight: 700;">
+                    <p style="color: var(--primary); margin: 8px 0;">● Complex Carbohydrates (50%)</p>
+                    <p style="color: #818cf8; margin: 8px 0;">● Plant-based Protein (30%)</p>
+                    <p style="color: #fbbf24; margin: 8px 0;">● Healthy Fats (20%)</p>
+                </div>
+            </div>
+            <div style="text-align: center;">
+                <h3 style="font-size: 1rem; margin-bottom: 10px; font-weight: 700;">Energy Projection</h3>
+                <svg viewBox="0 0 1000 250" style="width: 100%; height: auto; max-height: 140px;">
+                    <path d="M0,220 Q250,180 500,120 T1000,30 L1000,250 L0,250 Z" fill="rgba(34, 197, 94, 0.1)" stroke="var(--primary)" stroke-width="5" stroke-linecap="round"/>
+                    <circle cx="500" cy="120" r="8" fill="var(--primary)" />
+                </svg>
+                <p style="color: var(--text-muted); font-size: 14px; margin-top: 8px;"><i class="fas fa-chart-line"></i> Steady energy flow, avoiding hypoglycaemia</p>
+            </div>
+        </div>
+    </div>
+
+    
+
+</div>
+
+<script>
+        
+        const plantDatabase = {
+            vegan: {
+                woman: {
+                    title: "Vegan (Plant-Based Power)",
+                    subtitle: "Programme for Female (Vegan Lean Bulk)",
+                    badgeColor: "bg-emerald-50 text-emerald-700 border border-emerald-200",
+                    tips: [
+                        "<strong>Don't fear the Oil:</strong> Each meal must to has 1-2 tablespoons raw olive oil in the end. It is the more easy way for +250 calories.",
+                        "<strong>Liquid Calories:</strong> The smoothies is the best friend your. You can to 'drink' 600-800 calories lots of more easily from the to the eat in solid meal.",
+                        "<strong>Protein Combining:</strong> Combine legumes with rice or quinoa (e.g. lentils & rice) for to get all the essential amino acids."
+                    ],
+                    weeks: [
+                        {
+                            name: "Week 1: Plant Ignition",
+                            days: [
+                                { day: "Monday", breakfast: "1 cup oats with soy milk, 1 tbsp chia & berries", lunch: "1.5 cup Lentils with 1 cup rice brown & salad", snack: "1 handful almonds & 1 apple" },
+                                { day: "Tuesday", breakfast: "'Omelette' from chickpea flour with spinach & 1 slice bread", lunch: "150g Tofu grilled with 120g sweet potato & broccoli", snack: "1 yogurt soy with 1 tbsp flaxseed" },
+                                { day: "Wednesday", breakfast: "2 slices whole-grain bread with 1/2 avocado & cherry tomatoes", lunch: "1.5 cup Chickpeas with 1/2 cup quinoa & lemon", snack: "1 scoop plant-based protein & 1 banana" },
+                                { day: "Thursday", breakfast: "Smoothie: Almond milk, 1 tbsp peanut butter, 30g oats", lunch: "Burger from black beans in bread roll whole-grain & salad", snack: "2 rice cakes with tahini & honey (or syrup agave)" },
+                                { day: "Friday", breakfast: "1 bowl yogurt soy with granola & dried figs", lunch: "150g Tempeh with 1 cup basmati rice & grilled vegetables", snack: "10 walnuts & 1 orange" },
+                                { day: "Saturday", breakfast: "Oat pancakes (with soy milk & flaxseed)", lunch: "Whole-grain pasta with sauce from lentils (bolognese)", snack: "1/2 avocado with salt & pepper" },
+                                { day: "Sunday", breakfast: "2 slices bread with tahini & slices banana", lunch: "Vegan Cheat: Burger plant-based with fries", snack: "1 handful mixed nuts" }
+                            ]
+                        },
+                        {
+                            name: "Week 2: Variety & Plant-based Protein",
+                            days: [
+                                { day: "Monday", breakfast: "Chia Pudding (4 tbsp chia in soy milk) with 1/2 mango or banana", lunch: "150g Tofu smoked, 1 cup quinoa & grilled zucchini", snack: "1 handful pistachios & 2 dried apricots" },
+                                { day: "Tuesday", breakfast: "2 slices whole-grain bread with 2 tbsp hummus & hemp seeds", lunch: "Whole-grain pasta (1.5 cup) with sauce 'ground meat' from mushrooms", snack: "1 yogurt soy with cinnamon & 1 tbsp sunflower seeds" },
+                                { day: "Wednesday", breakfast: "Smoothie: Almond milk, 1 scoop vegan protein, 30g oats & cocoa", lunch: "1.5 cup Chickpeas (creamy) with 1 slice bread & olives", snack: "1 toast whole-grain with peanut butter & a little honey" },
+                                { day: "Thursday", breakfast: "1 cup Oats cooked (porridge) with soy milk & 10 walnuts", lunch: "150g Tempeh or Seitan with 1 large potato grilled & salad", snack: "2 rice cakes with avocado & salt/pepper" },
+                                { day: "Friday", breakfast: "2 Oat pancakes (oats, soy milk, flaxseed)", lunch: "1.5 cup Green beans with 100g Tofu (in cubes) & 1/2 cup rice", snack: "1 protein bar (vegan) & 1 green apple" },
+                                { day: "Saturday", breakfast: "1 slice whole-grain bread with tahini, honey & chia seeds", lunch: "2 Burger vegetables (homemade) with 1 cup quinoa & salad", snack: "1 handful cashews & 1 juice orange" },
+                                { day: "Sunday", breakfast: "Tofu Scramble (100g tofu) with turmeric & 1 slice bread", lunch: "Vegan Cheat: Souvlaki with mushroom gyros or Seitan", snack: "1 sesame bar" }
+                            ]
+                        },
+                        {
+                            name: "Week 3: Dynamic Reset",
+                            days: [
+                                { day: "Monday", breakfast: "'Omelette' chickpea with spinach & mushrooms, 1 slice whole-grain bread", lunch: "Chicken soy (Heura/Tofu) stir-fry with noodles & vegetables", snack: "1 yogurt soy with 2 tbsp granola & raisins" },
+                                { day: "Tuesday", breakfast: "2 large rusks barley with hummus, tomato & 5 olives", lunch: "2 lentil patties with sweet potato mash (with almond milk)", snack: "10 cashews & 1 orange" },
+                                { day: "Wednesday", breakfast: "Smoothie: 1 scoop vegan protein, 1 banana, 3 tbsp oats", lunch: "150g Tempeh with 1/2 cup quinoa & broccoli steamed", snack: "2 rice cakes with avocado & smoked tofu" },
+                                { day: "Thursday", breakfast: "1 cup oats (porridge) with soy milk & 10 pumpkin seeds", lunch: "Penne whole-grain with sauce 'ground meat' mushroom & nutritional yeast", snack: "1 handful sunflower seeds & 2 prunes" },
+                                { day: "Friday", breakfast: "Yogurt soy with 1 tsp peanut butter, honey & 2 tbsp oats", lunch: "Lentils 'dry' (salad) with quinoa, peppers & 1 small rusk", snack: "1 cereal bar (vegan) & a little soy milk" },
+                                { day: "Saturday", breakfast: "Tofu scrambled (100g) with turmeric in 2 slices toasted bread", lunch: "Risotto with assorted mushrooms, vegan parmesan & truffle oil", snack: "1 banana with 1 tablespoon tahini" },
+                                { day: "Sunday", breakfast: "Oat pancakes with syrup maple & 5-6 walnuts", lunch: "Vegan Cheat: Vegan Burger or homemade cheese pie with plant-based cheese", snack: "1 handful mix nuts" }
+                            ]
+                        },
+                        {
+                            name: "Week 4: Max Plant Calories (Final Stage)",
+                            days: [
+                                { day: "Monday", breakfast: "2 slices bread with 1/2 avocado & 1 tbsp nutritional yeast", lunch: "150g Tofu grilled, 1.5 cup basmati rice & broccoli", snack: "1 yogurt soy with granola & 1 date" },
+                                { day: "Tuesday", breakfast: "1.5 cup Oats with soy milk, 1 tbsp almond butter & berries", lunch: "Chili sin Carne (black beans, corn, sauce) with rice", snack: "1 handful walnuts & 1 banana" },
+                                { day: "Wednesday", breakfast: "Breakfast Burrito: Tortilla with tofu scramble & black beans", lunch: "Whole-grain pasta with pesto basil & cashews", snack: "Smoothie: Almond milk & 1 scoop protein" },
+                                { day: "Thursday", breakfast: "Oat pancakes with syrup agave & slices banana", lunch: "1.5 cup Baked giant beans with 1 slice bread & salad", snack: "2 rice cakes with tahini & honey" },
+                                { day: "Friday", breakfast: "1 bowl yogurt soy with lots of granola & 1 tbsp chia", lunch: "150g Seitan 'lemon (sauce)' with baked potatoes", snack: "1 protein bar (vegan)" },
+                                { day: "Saturday", breakfast: "2 slices whole-grain bread with hummus & roasted peppers", lunch: "Risotto mushroom with plenty of nutritional yeast", snack: "1 handful pistachios" },
+                                { day: "Sunday", breakfast: "Hearty breakfast with pancakes & nuts", lunch: "Vegan Cheat: Vegan Pizza with plant-based cheese", snack: "1 fruit & a few walnuts" }
+                            ]
+                        }
+                    ]
+                },
+                man: {
+                    title: "Vegan (Plant-Based Power)",
+                    subtitle: "Programme for Male (Vegan Mass Bulking)",
+                    badgeColor: "bg-emerald-50 text-emerald-700 border border-emerald-200",
+                    tips: [
+                        "<strong>Don't fear the Oil:</strong> Each meal must to has 1-2 tablespoons raw olive oil in the end. It is the more easy way for +250 calories.",
+                        "<strong>Liquid Calories:</strong> The smoothies is the best friend your. You can to 'drink' 600-800 calories lots of more easily from the to the eat in solid meal.",
+                        "<strong>Protein Combining:</strong> Combine legumes with rice or quinoa (e.g. lentils & rice) for to get all the essential amino acids."
+                    ],
+                    weeks: [
+                        {
+                            name: "Week 1: Vegan Foundation",
+                            days: [
+                                { day: "Monday", breakfast: "1.5 cup oats with soy milk, 2 tbsp peanut butter, 1 banana", lunch: "2 cup Lentils creamy, 1.5 cup rice, olives & 2 slices bread", snack: "Smoothie: 2 scoop plant-based protein, 50g oats, milk" },
+                                { day: "Tuesday", breakfast: "Tofu Scramble (200g tofu) with turmeric, vegetables & 2 slices bread", lunch: "200g Seitan (or Tempeh) with 2 large baked potatoes", snack: "1 handful cashews & 2 dried prunes" },
+                                { day: "Wednesday", breakfast: "3 slices whole-grain bread with 1 whole avocado & hemp seeds", lunch: "2 cup Chickpeas with 1.5 cup quinoa & lots of olive oil", snack: "1 yogurt soy with 1/2 cup granola & honey" },
+                                { day: "Thursday", breakfast: "Oat pancakes (double serving) with tahini, honey & walnuts", lunch: "2 plant-based burgers (e.g. Beyond) with 2 cup rice & salad", snack: "2 toast whole-grain with hummus & cucumber" },
+                                { day: "Friday", breakfast: "1 bowl yogurt soy (large), 60g oats, chia & fruit", lunch: "Green beans with 200g Tofu & 1 slice bread", snack: "1 protein bar (vegan) & 1 juice" },
+                                { day: "Saturday", breakfast: "Smoothie Bowl: Bananas, berries, protein, oats, nuts", lunch: "Whole-grain pasta (large portion) with soy mince & vegan cheese", snack: "1 handful pistachios & 1 banana" },
+                                { day: "Sunday", breakfast: "Hearty breakfast with 'omelette' chickpea, avocado & bread", lunch: "Vegan Cheat: Vegan Pizza or Souvlaki with mushroom gyros", snack: "1 sesame bar & nuts" }
+                            ]
+                        },
+                        {
+                            name: "Week 2: High Density & Muscle Recovery",
+                            days: [
+                                { day: "Monday", breakfast: "Tofu Scramble (250g tofu), 2 slices whole-grain bread & avocado", lunch: "250g Seitan or Tempeh, 2 cup basmati rice & broccoli", snack: "Smoothie: 2 scoop protein, 50g oats, 1 tbsp peanut butter" },
+                                { day: "Tuesday", breakfast: "1.5 cup Oats with soy milk, 2 tbsp peanut butter & 1 banana", lunch: "2.5 cup Whole-grain pasta with soy mince & vegan cheese", snack: "1 yogurt soy with 1/2 cup granola & 2 dates" },
+                                { day: "Wednesday", breakfast: "3 slices whole-grain bread with hummus, tomato & 15 walnuts", lunch: "2 cup Chickpeas (creamy) with 1.5 cup quinoa & olives", snack: "2 rice cakes with tahini, honey & hemp seeds" },
+                                { day: "Thursday", breakfast: "Smoothie Bowl: 2 bananas, 2 scoop protein, oats & nuts", lunch: "2 Vegan Burgers (Beyond/Bio) with 2 large roasted potatoes", snack: "1 toast whole-grain with avocado & 1 handful pistachios" },
+                                { day: "Friday", breakfast: "3 Oat pancakes (large) with honey, tahini & cocoa", lunch: "2 cup Lentils 'dry' with 150g Tofu smoked & 2 slices bread", snack: "1 protein bar (vegan) & 1 glass soy milk" },
+                                { day: "Saturday", breakfast: "2 slices bread with peanut butter & 2 bananas", lunch: "Risotto mushroom (large portion) with cashews & yeast", snack: "1 handful cashews & dried figs" },
+                                { day: "Sunday", breakfast: "Hearty breakfast (Tofu scramble, potatoes, bread, juice)", lunch: "Vegan Cheat: Vegan Burger with fries", snack: "1 sesame bar & nuts" }
+                            ]
+                        },
+                        {
+                            name: "Week 3: Dynamic Reset",
+                            days: [
+                                { day: "Monday", breakfast: "'Omelette' chickpea (double serving) with spinach, 2 slices whole-grain bread", lunch: "Seitan or Tofu stir-fry with noodles rice, vegetables & cashews", snack: "1 large yogurt soy with granola & black raisins" },
+                                { day: "Tuesday", breakfast: "3 large rusks with hummus, tomato, olives & plenty of oil", lunch: "3 soy patties or lentils with plenty of sweet potato mash", snack: "1 large handful cashews & 1 orange" },
+                                { day: "Wednesday", breakfast: "Smoothie: 2 scoop vegan protein, 1 banana, 5 tbsp oats", lunch: "200g Tofu 'steak' with 1.5 cup quinoa & broccoli", snack: "3 rice cakes with avocado & smoked tofu" },
+                                { day: "Thursday", breakfast: "1.5 cup oats (porridge) with soy milk, cinnamon & 1 handful sunflower seeds", lunch: "Penne whole-grain (large portion) with cream soy & mushrooms", snack: "2 dates stuffed with peanut butter & 2 prunes" },
+                                { day: "Friday", breakfast: "Yogurt soy with 1 tbsp peanut butter, honey & 4 tbsp oats", lunch: "Lentils 'dry' with 1/2 cup rice, corn & 2 rusks", snack: "1 protein bar (vegan) & 1 glass soy milk" },
+                                { day: "Saturday", breakfast: "Tofu scrambled (200g) with 3 slices toasted bread", lunch: "Risotto mushroom with nutritional yeast & truffle oil", snack: "1 banana with 1 large tablespoon tahini" },
+                                { day: "Sunday", breakfast: "Oat pancakes (double serving) with honey & walnuts", lunch: "Vegan Cheat: Vegan Pizza or Burger with potatoes", snack: "1 large handful nuts" }
+                            ]
+                        },
+                        {
+                            name: "Week 4: Absolute Max Calories (Final Stage)",
+                            days: [
+                                { day: "Monday", breakfast: "2 slices bread with avocado & 200g Tofu scrambled", lunch: "250g Tofu grilled, 2.5 cup rice & grilled vegetables", snack: "Smoothie: 2 scoop protein, 1 banana, 2 tbsp tahini" },
+                                { day: "Tuesday", breakfast: "2 cup Oats (porridge) with soy milk, honey & hazelnuts", lunch: "2.5 cup Pasta Carbonara (with cream soy & smoked tofu)", snack: "Yogurt soy with granola & 2 dried prunes" },
+                                { day: "Wednesday", breakfast: "3 slices bread with peanut butter, honey & 1 banana", lunch: "2 cup Giant baked beans with 1 plant-based sausage & 2 slices bread", snack: "1 handful mixed nuts & 1 protein bar" },
+                                { day: "Thursday", breakfast: "Oat pancakes (double serving) with syrup & walnuts", lunch: "250g Seitan 'in tomato sauce' with 2 cup quinoa & salad", snack: "2 toast with hummus & cucumber" },
+                                { day: "Friday", breakfast: "1 large bowl yogurt soy with oats, chia & fruit", lunch: "2.5 cup Chickpea stew with 1.5 cup rice & lots of olive oil", snack: "Smoothie: Almond milk, 2 scoop protein, cocoa" },
+                                { day: "Saturday", breakfast: "Breakfast Burrito (2 tortillas) with tofu, beans & avocado", lunch: "1 large portion Pastitsio (vegan with soy mince)", snack: "1 handful cashews & 1 banana" },
+                                { day: "Sunday", breakfast: "Whatever you've been missing as a vegan, in a big portion!", lunch: "Vegan Cheat: Vegan Pizza or Burger", snack: "1 fruit & nuts" }
+                            ]
+                        }
+                    ]
+                }
+            },
+            vegetarian: {
+                woman: {
+                    title: "Vegetarian (The Dairy & Egg Edge)",
+                    subtitle: "Programme for Female (Vegetarian Lean Bulk)",
+                    badgeColor: "bg-teal-50 text-teal-700 border border-teal-200",
+                    tips: [
+                        "Select dairy low fat (2%) for sufficient intake protein without excessively saturated fats.",
+                        "Don't skip the eggs as are source protein high biological value and choline.",
+                        "*Note: If the plan includes salmon and follow strict vegetarian diet, replace with grilled cheese or tofu."
+                    ],
+                    weeks: [
+                        {
+                            name: "Week 1: The Base (Protein & Fiber)",
+                            days: [
+                                { day: "Monday", breakfast: "2 eggs omelette, 1/2 cup oats with milk 2% & honey", lunch: "150g Cottage cheese, 1 cup basmati rice & grilled vegetables", snack: "1 toast whole-grain with light cheese & avocado" },
+                                { day: "Tuesday", breakfast: "1 slice whole-grain bread with peanut butter & 1 banana", lunch: "1.5 cup Lentils with 30g feta & 1 boiled egg", snack: "1 yogurt (2%) with 5 walnuts & honey" },
+                                { day: "Wednesday", breakfast: "2 scrambled eggs in 1 slice whole-grain bread", lunch: "Whole-grain pasta with sauce tomato & plenty of mizithra cheese", snack: "10 almonds & 1 dried fig" },
+                                { day: "Thursday", breakfast: "Oat pancakes (egg white, oats, 1 tbsp yogurt)", lunch: "Patties vegetables with 1/2 cup quinoa & salad", snack: "2 rice cakes with tahini & honey" },
+                                { day: "Friday", breakfast: "1 bowl yogurt (2%) with granola & fresh fruit", lunch: "Chickpeas with 1/2 cup rice, 30g anthotyro cheese & olives", snack: "1 protein bar & 1 glass milk" },
+                                { day: "Saturday", breakfast: "1 toast with boiled egg, light cheese & tomato", lunch: "Soufflé broccoli with cheeses low fat & egg", snack: "Smoothie: Milk, half banana & 1 tsp peanut butter" },
+                                { day: "Sunday", breakfast: "2 fried eggs (non-stick) with 1 slice bread", lunch: "Veggie Cheat: Burger vegetables with potatoes", snack: "1 handful nuts" }
+                            ]
+                        },
+                        {
+                            name: "Week 2: Variety & Calcium",
+                            days: [
+                                { day: "Monday", breakfast: "2 boiled eggs, 1 slice whole-grain bread with cream cheese", lunch: "Spinach rice with 1 egg poached & 30g feta", snack: "1 kiwi & 10 pistachios" },
+                                { day: "Tuesday", breakfast: "Bowl yogurt (2%), oats, cocoa & 1 tbsp chia", lunch: "Penne whole-grain with pesto basil & mozzarella light", snack: "2 rye crackers with cottage cheese" },
+                                { day: "Wednesday", breakfast: "Omelette (2 eggs) with mushrooms, peppers & cheese", lunch: "Green beans oil-based dishes with 1 boiled egg & anthotyro cheese", snack: "Smoothie: Milk 2%, 1 apple & cinnamon" },
+                                { day: "Thursday", breakfast: "1 slice bread with tahini, honey & chia seeds", lunch: "Stuffed vegetables with rice & pine nuts + 1 tub yogurt", snack: "1 tub cottage cheese with half pear" },
+                                { day: "Friday", breakfast: "2 fried eggs with 1 slice whole-grain bread & cherry tomatoes", lunch: "Fava (split-pea purée) with spring onion, olives & 1 boiled egg", snack: "5 walnuts & 1 square dark chocolate" },
+                                { day: "Saturday", breakfast: "1 slice French Toast (with egg white) with honey", lunch: "Lasagna with spinach, anthotyro cheese & white sauce yogurt", snack: "1 rice cake with peanut butter" },
+                                { day: "Sunday", breakfast: "1 egg scrambled with 1/4 avocado & rye bread", lunch: "Veggie Cheat: Pizza with vegetables & extra cheeses", snack: "1 sesame bar" }
+                            ]
+                        },
+                        {
+                            name: "Week 3: Dynamic Reset",
+                            days: [
+                                { day: "Monday", breakfast: "2 eggs omelette with spinach & 3 tbsp oats", lunch: "150g Halloumi grilled, 1 cup quinoa & salad", snack: "1 yogurt 2% with 1 tbsp granola & raisins" },
+                                { day: "Tuesday", breakfast: "1 large rusk with 40g light feta & tomato", lunch: "2 vegetable patties with sweet potato mash", snack: "10 cashews & 1 orange" },
+                                { day: "Wednesday", breakfast: "Smoothie: 1 scoop whey, 1 banana, 2 tbsp oats", lunch: "2 boiled eggs, 1.5 cup fava (split-pea purée) & roasted peppers", snack: "1 rice cake with cottage cheese & salmon*" },
+                                { day: "Thursday", breakfast: "2 scrambled eggs & 1/2 sesame bread ring (Thessaloniki-style)", lunch: "Penne whole-grain with sauce yogurt, garlic & dill", snack: "1 tbsp sunflower seeds & 2 prunes" },
+                                { day: "Friday", breakfast: "Yogurt 2% with 1 tsp peanut butter & oats", lunch: "Lentils 'dry' with 1 boiled egg & rusk", snack: "1 small cereal bar" },
+                                { day: "Saturday", breakfast: "2 scrambled eggs in 1 slice toasted bread", lunch: "Risotto with mushrooms, parmesan & a little truffle oil", snack: "Half banana with a little tahini" },
+                                { day: "Sunday", breakfast: "Oat pancakes with 1 egg, yogurt & honey", lunch: "Veggie Cheat: Homemade cheese pie or spinach pie", snack: "1 handful nuts" }
+                            ]
+                        },
+                        {
+                            name: "Week 4: The Final Stage (Max Nutrients)",
+                            days: [
+                                { day: "Monday", breakfast: "2 eggs omelette with a little potato (-style tortilla)", lunch: "1 Vegetarian Burger (with patty legumes) & salad", snack: "Yogurt 2% with 5 almonds & honey" },
+                                { day: "Tuesday", breakfast: "1 slice bread with 1/4 avocado & 1 egg poached", lunch: "Curry vegetables with chickpeas, coconut milk & rice", snack: "1 handful nuts & 1 banana" },
+                                { day: "Wednesday", breakfast: "Oat bowl with milk 2%, cocoa & hazelnuts", lunch: "Spaghetti whole-grain Carbonara (with egg & parmesan)", snack: "1 slice whole-grain bread with light cheese" },
+                                { day: "Thursday", breakfast: "2 boiled eggs, 1 slice bread, 1 piece graviera cheese", lunch: "Salmon* (or grilled cheese) with potatoes & asparagus", snack: "Smoothie: Milk 2%, peanut butter, honey" },
+                                { day: "Friday", breakfast: "Pancakes with cottage cheese, egg whites & honey", lunch: "Baked giant beans with 50g feta & 1 slice bread", snack: "1 protein bar & 1 juice" },
+                                { day: "Saturday", breakfast: "2 fried eggs with 1 small rusk & olives", lunch: "Pastitsio vegetables (with mushrooms & béchamel)", snack: "5 cashews & 1 apricot dried" },
+                                { day: "Sunday", breakfast: "Hearty breakfast with eggs & 1 slice bread", lunch: "Veggie Cheat: Festive table (cheeses, pies)", snack: "1 fruit" }
+                            ]
+                        }
+                    ]
+                },
+                man: {
+                    title: "Vegetarian (The Dairy & Egg Edge)",
+                    subtitle: "Programme for Male (Vegetarian Mass Bulking)",
+                    badgeColor: "bg-teal-50 text-teal-700 border border-teal-200",
+                    tips: [
+                        "Select dairy high content (5%) for to cover the energy needs of the bulking.",
+                        "The smoothies and the in-between snack with nuts offer easy and quality calories.",
+                        "*Note: If the plan includes salmon and follow strict vegetarian diet, replace with grilled cheese or tofu."
+                    ],
+                    weeks: [
+                        {
+                            name: "Week 1: The Base (Protein & Volume)",
+                            days: [
+                                { day: "Monday", breakfast: "4 eggs omelette, 1 cup oats with whole milk & honey", lunch: "250g Cottage cheese, 2 cup basmati rice & salad", snack: "1 toast with 2 slices cheese, egg & avocado" },
+                                { day: "Tuesday", breakfast: "2 slices bread with lots of peanut butter & 1 banana", lunch: "2 cup Lentils, 60g feta, 2 slices bread & 2 boiled eggs", snack: "1 yogurt (5%) with plenty of walnuts & honey" },
+                                { day: "Wednesday", breakfast: "3 scrambled eggs in 2 slices rustic bread", lunch: "Pasta with sauce tomato & 1 cup grated cheese", snack: "1 handful almonds & 2 dried figs" },
+                                { day: "Thursday", breakfast: "Oat pancakes (3 eggs, oats, 1 banana, honey)", lunch: "3 Patties vegetables with 1.5 cup quinoa & salad", snack: "2 rice cakes with tahini & honey" },
+                                { day: "Friday", breakfast: "1 large bowl yogurt (5%) with granola & 2 fruit", lunch: "2 cup Chickpeas with 1 cup rice, 60g anthotyro cheese & olives", snack: "1 protein bar & 1 glass milk" },
+                                { day: "Saturday", breakfast: "2 Toast with 3 eggs, cheese & butter", lunch: "Omelette baked (4 eggs) with potatoes & cheeses", snack: "Smoothie: Milk, 1 banana & 1 tbsp peanut butter" },
+                                { day: "Sunday", breakfast: "3 fried eggs with 2 slices rustic bread & olives", lunch: "Veggie Cheat: Burger vegetables & potatoes", snack: "1 large handful mixed nuts" }
+                            ]
+                        },
+                        {
+                            name: "Week 2: Variety & Strength",
+                            days: [
+                                { day: "Monday", breakfast: "3 boiled eggs, 2 slices bread with cream cheese", lunch: "2 cup Spinach rice with 2 poached eggs & 60g feta", snack: "1 banana & 1 handful pistachios" },
+                                { day: "Tuesday", breakfast: "Bowl yogurt (5%), oats, cocoa, honey & chia", lunch: "Whole-grain pasta (2 cup) with pesto & mozzarella", snack: "2 crackers with double cheese & 1 boiled egg" },
+                                { day: "Wednesday", breakfast: "Omelette (4 eggs) with mushrooms, peppers & cheese", lunch: "2 cup Green beans with 2 boiled eggs & anthotyro cheese", snack: "Smoothie: Milk, 1 apple, cinnamon & oats" },
+                                { day: "Thursday", breakfast: "2 slices bread with tahini, honey & chia seeds", lunch: "2 cup Peas with 2 baked potatoes & yogurt", snack: "1 tub cottage cheese with 1 pear" },
+                                { day: "Friday", breakfast: "3 fried eggs with 2 slices bread & 1 sausage soy", lunch: "2 cup Chickpeas with 1 cup rice, olives & 60g feta", snack: "1 handful walnuts & a little dark chocolate" },
+                                { day: "Saturday", breakfast: "French Toast (3 slices) with lots of honey & cinnamon", lunch: "Lasagna with spinach, anthotyro cheese & béchamel cheeses", snack: "1 toast with peanut butter & honey" },
+                                { day: "Sunday", breakfast: "3 scrambled eggs with avocado & 2 slices bread", lunch: "Veggie Cheat: Pizza with 4 cheeses & vegetables", snack: "1 piece cake or sesame bar" }
+                            ]
+                        },
+                        {
+                            name: "Week 3: Dynamic Reset",
+                            days: [
+                                { day: "Monday", breakfast: "4 eggs omelette with spinach, 1 cup oats", lunch: "200g Halloumi, 1.5 cup rice brown & salad", snack: "1 yogurt 5% with granola & raisins" },
+                                { day: "Tuesday", breakfast: "2 large rusks with feta, tomato & plenty of oil", lunch: "3 vegetable patties with double sweet potato mash", snack: "1 handful cashews & 1 orange" },
+                                { day: "Wednesday", breakfast: "Smoothie: 2 scoop whey, banana, 5 tbsp oats", lunch: "3 boiled eggs, 2 cup fava (split-pea purée) & roasted peppers", snack: "2 rice cakes with cottage cheese & honey" },
+                                { day: "Thursday", breakfast: "3 boiled eggs & 1 large sesame bread ring (Thessaloniki-style)", lunch: "Penne with sauce yogurt, cheeses & mushrooms", snack: "1 handful sunflower seeds & 2 prunes" },
+                                { day: "Friday", breakfast: "Yogurt 5% with peanut butter, honey & oats", lunch: "Lentils 'dry' with 2 boiled eggs & 2 rusks", snack: "1 protein bar & 1 glass milk" },
+                                { day: "Saturday", breakfast: "3 scrambled eggs with cheese & toasted bread", lunch: "Risotto with mushrooms, parmesan & truffle oil", snack: "1 banana with 1 large tablespoon tahini" },
+                                { day: "Sunday", breakfast: "Oat pancakes (3 eggs) with lots of honey & walnuts", lunch: "Veggie Cheat: Large portion Pastitsio vegetables", snack: "1 handful mixed nuts" }
+                            ]
+                        },
+                        {
+                            name: "Week 4: The Final Stage (Max Calories)",
+                            days: [
+                                { day: "Monday", breakfast: "4 eggs omelette with potatoes (-style tortilla)", lunch: "2 Vegetarian Burgers (with cheese & avocado) & potatoes", snack: "Yogurt 5% with almonds & spoon sweet" },
+                                { day: "Tuesday", breakfast: "2 slices bread with avocado, 2 poached eggs & cheese", lunch: "Curry vegetables with chickpeas, coconut milk & 2 cup rice", snack: "1 handful nuts & 1 banana" },
+                                { day: "Wednesday", breakfast: "Oat bowl with milk, cocoa, honey & hazelnuts", lunch: "Spaghetti Carbonara (with 3 eggs & parmesan)", snack: "2 slices bread with cheese & turkey plant-based" },
+                                { day: "Thursday", breakfast: "3 boiled eggs, 2 slices bread, 1 piece graviera cheese", lunch: "Salmon* (or grilled cheese) with 2 potatoes & salad", snack: "Smoothie: Milk, peanut butter, honey" },
+                                { day: "Friday", breakfast: "Pancakes with cottage cheese, 2 eggs & lots of honey", lunch: "Baked giant beans with 60g feta & 2 slices bread", snack: "1 protein bar & 1 juice" },
+                                { day: "Saturday", breakfast: "3 fried eggs with 2 rusks, oil & olives", lunch: "Moussaka vegetables (with potatoes, eggplants & cheeses)", snack: "1 handful cashews & dried apricots" },
+                                { day: "Sunday", breakfast: "Whatever you've missed most (e.g. cheese pies)", lunch: "Veggie Cheat: Pizza with extra cheese & vegetables", snack: "1 fruit & nuts" }
+                            ]
+                        }
+                    ]
+                }
+            }
+        };
+</script>
+
+<script>
+   
+function toggleTheme() {
+    const body = document.body;
+    const modeIcon = document.getElementById('mode-icon');
+    body.classList.toggle('light-mode');
+    const isLight = body.classList.contains('light-mode');
+    if (modeIcon) modeIcon.innerHTML = isLight ? "\u2600\ufe0f" : "\ud83c\udf19";
+    try { localStorage.setItem('theme', isLight ? 'light' : 'dark'); } catch (e) {}
+}
+
+try {
+    if (localStorage.getItem('theme') === 'light') {
+        document.body.classList.add('light-mode');
+        var __mi = document.getElementById('mode-icon');
+        if (__mi) __mi.innerHTML = "\u2600\ufe0f";
+    }
+} catch (e) {}
+
+
+function toggleAccordion(headerElement) {
+    const currentItem = headerElement.parentElement;
+    const isActive = currentItem.classList.contains('active');
+    
+    document.querySelectorAll('.accordion-item').forEach(item => {
+        item.classList.remove('active');
+    });
+    
+    if (!isActive) {
+        currentItem.classList.add('active');
+    }
+}
+
+
+function createLeaves() {
+    const container = document.getElementById('leaves');
+    for (let i = 0; i < 15; i++) {
+        const leaf = document.createElement('div');
+        leaf.className = 'leaf';
+        leaf.style.left = Math.random() * 100 + '%';
+        leaf.style.animationDuration = (Math.random() * 5 + 5) + 's';
+        leaf.style.animationDelay = Math.random() * 5 + 's';
+        container.appendChild(leaf);
+    }
+}
+createLeaves();
+
+
+window.onload = function() {
+    const params = new URLSearchParams(window.location.search);
+    const cat = params.get('cat');       
+    const goal = params.get('goal');     
+    const urlGender = params.get('gender'); 
+    const w = parseFloat(params.get('w'));
+    const h = parseFloat(params.get('h'));
+    
+    const titleElement = document.getElementById('dynamic-diet-title');
+    const mainTitle = document.getElementById('main-title');
+    const accordionContainer = document.getElementById('dynamic-accordion-container');
+    
+    
+    const genderKey = urlGender === 'male' ? 'man' : (urlGender === 'female' ? 'woman' : null);
+
+    
+    if (!cat || !genderKey || !w || !h || !plantDatabase[cat] || !plantDatabase[cat][genderKey]) {
+        titleElement.innerHTML = "<i class='fas fa-exclamation-triangle'></i> Data Error";
+        accordionContainer.innerHTML = "<p style='text-align:center; color:var(--text-muted);'>No personal details found. Please return to the home page and fill in the form.</p>";
+        return;
+    }
+
+    const data = plantDatabase[cat][genderKey];
+    mainTitle.innerText = cat === 'vegan' ? "Vegan Plan" : "Vegetarian Plan";
+    titleElement.innerHTML = `<i class="fas fa-leaf"></i> ${data.title}`;
+    
+    
+    let multiplier = (w > 80 || h > 180) ? 1.2 : 1.0;
+    
+    document.getElementById('multiplier-badge').innerText = multiplier + "x";
+    if (multiplier > 1.0) {
+        document.getElementById('multiplier-reason').innerHTML = `Based on your body type (Weight: ${w}kg, Height: ${h}cm), the gram amounts have been automatically increased by 20% to ideally cover your needs.`;
+    }
+    
+    let accordionHtml = '';
+
+    
+    data.weeks.forEach((weekData, weekIndex) => {
+        let activeClass = (weekIndex === 0) ? 'active' : '';
+        
+        accordionHtml += `
+            <div class="accordion-item ${activeClass}">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span><i class="fas fa-calendar-alt" style="margin-right: 10px;"></i> ${weekData.name}</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="accordion-content table-layout">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Day</th>
+                                <th>Breakfast</th>
+                                <th>Lunch</th>
+                                <th>Snack</th>
+                            </tr>
+                        </thead>
+                        <tbody>`;
+
+        weekData.days.forEach(day => {
+            let lunchText = day.lunch;
+            
+            
+            if (multiplier > 1.0) {
+                lunchText = lunchText.replace(/(\d+)g/g, function(match, grams) {
+                    return Math.round(parseInt(grams) * multiplier) + "g";
+                });
+            }
+
+            accordionHtml += `
+                <tr>
+                    <td><strong>${day.day}</strong></td>
+                    <td>${day.breakfast}</td>
+                    <td>${lunchText}</td>
+                    <td>${day.snack}</td>
+                </tr>`;
+        });
+
+        accordionHtml += `
+                        </tbody>
+                    </table>
+                </div>
+            </div>`;
+    });
+
+    accordionContainer.innerHTML = accordionHtml;
+};
+</script>
+
+    <style>
+    .site-footer {
+        width: 100%;
+        padding: 32px 0;
+        border-top: 1px solid rgba(148, 163, 184, 0.25);
+        margin-top: 60px;
+        background: transparent;
+    }
+    .site-footer-inner { text-align: center; }
+    .site-footer-logo {
+        font-family: 'Sora', sans-serif;
+        font-size: 1.125rem;
+        font-weight: 800;
+        letter-spacing: -0.04em;
+        margin: 0 0 4px;
+        color: inherit;
+    }
+    .site-footer-logo span { color: #00d2ff; }
+    .site-footer-tagline {
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        color: #94a3b8;
+        margin: 0 0 16px;
+    }
+    .site-footer-copy {
+        font-size: 12px;
+        font-weight: 500;
+        color: #94a3b8;
+        margin: 0;
+    }
+    </style>
+
+    <footer class="site-footer">
+        <div class="site-footer-inner">
+            <h2 class="site-footer-logo">FORGE<span>.</span></h2>
+            <p class="site-footer-tagline">Intelligent Training System</p>
+            <p class="site-footer-copy">&copy; 2026 FORGE. All rights reserved.</p>
+        </div>
+    </footer>
+
+
+<script>
+
+(function(){
+  try {
+    var p = new URLSearchParams(window.location.search);
+    if (p.get('embed') !== '1') return;
+    function reportHeight(){
+      var h = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
+      parent.postMessage({ forgeMealHeight: h }, '*');
+    }
+    window.addEventListener('load', function(){ reportHeight(); setTimeout(reportHeight, 600); });
+    
+    document.addEventListener('click', function(){ setTimeout(reportHeight, 100); setTimeout(reportHeight, 650); });
+  } catch(e){}
+})();
+</script>
+</body>
+</html>

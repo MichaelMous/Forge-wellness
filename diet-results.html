@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DietPro | Professional Nutrition Presentation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        
+        :root {
+            --primary: #00d2ff;
+            --accent: #3a7bd5;
+            --darker: #070b14;
+            --white: #ffffff;
+            --text-muted: #94a3b8;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --border: rgba(0, 210, 255, 0.15);
+            
+            
+            --quote-bg-img: url('https://images.unsplash.com/photo-1494390248081-4e521a5940db?q=80&w=1200');
+            --quote-overlay: rgba(7, 11, 20, 0.93);
+            --quote-text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        
+        body.light-mode {
+            --darker: #f0f2f5;
+            --white: #1a1a1a;
+            --text-muted: #4b5563;
+            --card-bg: #ffffff;
+            --border: #e2e8f0;
+            
+            
+            --quote-bg-img: url('https://images.unsplash.com/photo-1540420773420-3366772f4999?q=80&w=1200');
+            --quote-overlay: rgba(240, 242, 245, 0.85);
+            --quote-text-shadow: 0 1px 4px rgba(255,255,255,0.8);
+        }
+
+        
+        * { 
+            box-sizing: border-box; 
+            font-family: 'Inter', sans-serif !important;
+        }
+
+        
+        .fas, .far, .fab, .fa {
+            font-family: 'Font Awesome 6 Free', 'Font Awesome 6 Brands' !important;
+            font-weight: 900 !important;
+        }
+        
+        h1, h2, h3, h4, .logo {
+            font-family: 'Sora', sans-serif !important;
+        }
+        
+        body {
+            margin: 0; 
+            padding: 0;
+            background-color: var(--darker);
+            color: var(--white);
+            font-weight: 600; 
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        
+        .navbar {
+            position: fixed; top: 0; width: 100%; z-index: 1000;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px 8%; background: rgba(7, 11, 20, 0.85);
+            backdrop-filter: blur(10px); transition: all 0.3s ease;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+        body.light-mode .navbar {
+            background: rgba(240, 242, 245, 0.9);
+            border-bottom: 1px solid var(--border);
+        }
+        .navbar.navbar-clean { justify-content: center; }
+        .logo { font-size: 24px; font-weight: 800; letter-spacing: -0.04em; color: var(--white); text-decoration: none; }
+        .logo span { color: var(--primary); }
+        a.logo:hover { opacity: 0.85; }
+        .nav-links { display: flex; align-items: center; gap: 30px; }
+        .nav-links a { color: var(--white); text-decoration: none; font-weight: 700; font-size: 15px; }
+
+        
+        .mode-switch {
+            width: 60px; height: 30px; background: #1e293b;
+            border-radius: 15px; position: relative; cursor: pointer;
+            border: 2px solid var(--primary); transition: all 0.3s ease;
+        }
+        body.light-mode .mode-switch { background: #cbd5e1; }
+        .switch-ball {
+            width: 24px; height: 24px; background: var(--white);
+            border-radius: 50%; position: absolute; top: 1px; left: 2px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 14px; transition: all 0.3s ease;
+        }
+        body.light-mode .switch-ball { left: 30px; background: #0f172a; }
+
+        
+        .presentation-container {
+            max-width: 1200px;
+            margin: 120px auto 60px auto;
+            padding: 0 20px;
+            display: grid;
+            gap: 40px;
+        }
+
+        .slide-container {
+            width: 100%; 
+            background-color: rgba(255, 255, 255, 0.01);
+            border: 1px solid var(--border);
+            padding: 40px; 
+            position: relative;
+            overflow: hidden; 
+            border-radius: 24px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+        body.light-mode .slide-container {
+            background-color: var(--card-bg);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+
+        h1, h2, h3 { 
+            color: var(--white); 
+            margin: 0; 
+        }
+        
+        .slide-title { 
+            font-size: 30px; 
+            font-weight: 700;
+            margin-bottom: 25px; 
+            border-left: 5px solid var(--primary); 
+            padding-left: 15px; 
+            border-radius: 4px;
+        }
+
+        
+        .grid-2-columns { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 30px; 
+            align-items: center;
+        }
+        .grid-3-columns {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        @media (max-width: 768px) {
+            .grid-2-columns, .grid-3-columns { grid-template-columns: 1fr; }
+        }
+
+        
+        .info-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 25px;
+            border-radius: 20px; 
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        .info-card i {
+            font-size: 38px;
+            color: var(--primary);
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+        
+        
+        .table-layout table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            background: var(--card-bg); 
+            border-radius: 18px; 
+            overflow: hidden; 
+            margin-top: 15px;
+        }
+        .table-layout th, .table-layout td { 
+            padding: 14px; 
+            text-align: left; 
+            border-bottom: 1px solid var(--border); 
+        }
+        .table-layout th { 
+            background: rgba(0, 210, 255, 0.1); 
+            color: var(--primary); 
+            font-weight: 700; 
+        }
+        body.light-mode .table-layout th {
+            background: rgba(58, 123, 213, 0.08);
+            color: #3a7bd5;
+        }
+
+        
+        .accordion-item { 
+            background: var(--card-bg); 
+            border: 1px solid var(--border); 
+            border-radius: 18px; 
+            margin-bottom: 14px; 
+            padding: 15px 20px; 
+        }
+        .accordion-header { 
+            display: flex; justify-content: space-between; align-items: center; 
+            cursor: pointer; font-size: 1.1rem; font-weight: 700;
+        }
+        .accordion-header i { color: var(--primary); transition: transform 0.3s ease; }
+        .accordion-content { 
+            max-height: 0; overflow: hidden; transition: max-height 0.5s ease-out; 
+            color: var(--text-muted); font-size: 16px;
+        }
+        .accordion-item.active .accordion-content { max-height: 1500px; margin-top: 10px; }
+        .accordion-item.active .accordion-header i { transform: rotate(180deg); }
+
+        
+        .doughnut-chart-container { display: flex; align-items: center; gap: 40px; justify-content: center; }
+        .doughnut { 
+            width: 200px; height: 200px; border-radius: 50%; 
+            background: conic-gradient(var(--primary) 0% 40%, #818cf8 40% 70%, #fbbf24 70% 100%); 
+        }
+        .image-wrapper { border-radius: 20px; overflow: hidden; height: 260px; border: 1px solid var(--border); }
+        .image-wrapper img { width: 100%; height: 100%; object-fit: cover; }
+        
+        
+        .highlight-num { 
+            font-size: 95px; 
+            font-weight: 700; 
+            color: var(--primary); 
+            line-height: 1; 
+            letter-spacing: -2px;
+        }
+    </style>
+<style id="embed-style">
+
+body.embed-mode .navbar, body.embed-mode .site-footer { display: none !important; }
+body.embed-mode { padding-top: 0 !important; }
+body.embed-mode .results-wrapper, body.embed-mode main, body.embed-mode .container { padding-top: 24px !important; }
+</style>
+<script>
+(function(){
+  try {
+    var p = new URLSearchParams(window.location.search);
+    if (p.get('embed') === '1') {
+      document.addEventListener('DOMContentLoaded', function(){
+        document.body.classList.add('embed-mode');
+      });
+    }
+  } catch(e){}
+})();
+</script>
+<style id="print-expand">
+@media print {
+  
+  .accordion-content { max-height: none !important; overflow: visible !important; margin-top: 10px !important; }
+  .accordion-item .accordion-header i { transform: rotate(180deg) !important; }
+  .navbar, .site-footer { display: none !important; }
+}
+</style>
+</head>
+<body>
+
+<nav class="navbar navbar-clean">
+    <a href="Instopt.html" class="logo">FORGE<span>.</span></a>
+</nav>
+
+<div class="presentation-container">
+
+    <div class="slide-container" style="text-align: center; padding: 60px 20px;">
+        <span style="color: var(--primary); font-weight: 700; letter-spacing: 2px;">DIETPRO STRATEGY</span>
+        <h1 style="font-size: 55px; margin-top: 10px; font-weight: 700;">Scientific <span style="color: var(--primary);">Nutrition</span></h1>
+        <p style="font-size: 20px; color: var(--text-muted);">Your personalised plan for the next 30 days.</p>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title" id="dynamic-diet-title"><i class="fas fa-spinner fa-spin"></i> Loading your programme...</h2>
+        <div id="dynamic-accordion-container">
+            </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Data Analysis & Multiplier</h2>
+        <div class="grid-2-columns">
+            <div style="text-align: center;">
+                <div class="highlight-num" id="multiplier-badge">1.0x</div>
+                <p style="font-size: 18px; font-weight: 700;">Quantity Multiplier</p>
+            </div>
+            <div>
+                <h3 style="font-weight: 700;">Precision Adjustment</h3>
+                <p style="color: var(--text-muted); line-height: 1.6; font-size: 16px;" id="multiplier-reason">
+                    The plan your has optimised with base the personal your details.
+                </p>
+                <p style="font-size: 16px;"><i class="fas fa-check-circle" style="color: var(--primary); margin-right: 8px;"></i> Balanced Protein</p>
+                <p style="font-size: 16px;"><i class="fas fa-check-circle" style="color: var(--primary); margin-right: 8px;"></i> Strategic Carbohydrates</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Scientific Approach</h2>
+        <div class="grid-2-columns">
+            <div class="grid-2-columns" style="gap: 15px;">
+                <div class="image-wrapper"><img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=400" alt="Meal"></div>
+                <div>
+                    <h3 style="font-weight: 700;">Raw Materials</h3>
+                    <p style="color: var(--text-muted); font-size: 15px; line-height: 1.5;">We choose foods rich in Omega-3, clean protein and highly bioavailable plant fibre.</p>
+                </div>
+            </div>
+            <div class="grid-2-columns" style="gap: 15px;">
+                <div class="image-wrapper"><img src="https://images.unsplash.com/photo-1532938911079-1b06ac7ceec7?q=80&w=400" alt="Lab"></div>
+                <div>
+                    <h3 style="font-weight: 700;">Data Analysis</h3>
+                    <p style="color: var(--text-muted); font-size: 15px; line-height: 1.5;">Each meal has been thoroughly analysed for its caloric output and glycaemic index.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Statistical Plan Analysis</h2>
+        <div class="grid-2-columns">
+            <div class="doughnut-chart-container">
+                <div class="doughnut"></div>
+                <div style="font-size: 15px; font-weight: 700;">
+                    <p style="color: var(--primary); margin: 8px 0;">● Carbohydrates (40%)</p>
+                    <p style="color: #818cf8; margin: 8px 0;">● Proteins (30%)</p>
+                    <p style="color: #fbbf24; margin: 8px 0;">● Fats (30%)</p>
+                </div>
+            </div>
+            <div style="text-align: center;">
+                <h3 style="font-size: 1rem; margin-bottom: 10px; font-weight: 700;">Metabolic Evolution Projection</h3>
+                <svg viewBox="0 0 1000 250" style="width: 100%; height: auto; max-height: 140px;">
+                    <path d="M0,220 Q250,180 500,120 T1000,30 L1000,250 L0,250 Z" fill="rgba(0, 210, 255, 0.1)" stroke="var(--primary)" stroke-width="5" stroke-linecap="round"/>
+                    <circle cx="500" cy="120" r="8" fill="var(--primary)" />
+                </svg>
+                <p style="color: var(--text-muted); font-size: 14px; margin-top: 8px;"><i class="fas fa-chart-line"></i> Gradual increase in lean mass per week</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Key Rules for Success</h2>
+        <div class="grid-3-columns">
+            <div class="info-card">
+                <i class="fas fa-tint"></i>
+                <h3 style="font-weight: 700;">Hydration</h3>
+                <p style="color: var(--text-muted); font-size: 14px; line-height: 1.5;">3-4 litres of water daily for metabolic activation.</p>
+            </div>
+            
+            <div class="info-card">
+                <i class="fas fa-clock"></i>
+                <h3 style="font-weight: 700;">Frequency</h3>
+                <p style="color: var(--text-muted); font-size: 14px; line-height: 1.5;">Steady meals every 3-4 hours to avoid catabolism.</p>
+            </div>
+            <div class="info-card">
+                <i class="fas fa-bed"></i>
+                <h3 style="font-weight: 700;">Sleep</h3>
+                <p style="color: var(--text-muted); font-size: 14px; line-height: 1.5;">7-8 hours of quality sleep for maximum muscle repair.</p>
+            </div>
+        </div>
+    </div>
+
+    
+
+</div>
+
+<script src="diet-data.js"></script>
+
+<script>
+    
+    function toggleTheme() {
+        const body = document.body;
+        const modeIcon = document.getElementById('mode-icon');
+        body.classList.toggle('light-mode');
+        const isLight = body.classList.contains('light-mode');
+        modeIcon.innerHTML = isLight ? "☀️" : "🌙";
+        try { localStorage.setItem('theme', isLight ? 'light' : 'dark'); } catch(e) {}
+    }
+
+    
+    function toggleAccordion(headerElement) {
+        const currentItem = headerElement.parentElement;
+        const isActive = currentItem.classList.contains('active');
+        document.querySelectorAll('.accordion-item').forEach(item => item.classList.remove('active'));
+        if (!isActive) currentItem.classList.add('active');
+    }
+
+    
+    window.onload = function() {
+        
+        if (typeof dietDatabase === 'undefined') {
+            console.error("WARNING: The diet-data.js not loaded!");
+            return;
+        }
+
+        const params = new URLSearchParams(window.location.search);
+        const gender = params.get('gender');
+        const w = parseFloat(params.get('w'));
+        const h = parseFloat(params.get('h'));
+
+        const titleElement = document.getElementById('dynamic-diet-title');
+        const accordionContainer = document.getElementById('dynamic-accordion-container');
+        
+        
+        if (!gender || !w || !h || !dietDatabase.balanced || !dietDatabase.balanced[gender]) {
+            console.error("Missing data from the URL or the base.");
+            if(titleElement) titleElement.innerHTML = "Error loading data";
+            return;
+        }
+
+        const data = dietDatabase.balanced[gender];
+        let multiplier = (w > 80 || h > 180) ? 1.2 : 1.0;
+
+        
+        if (document.getElementById('multiplier-badge')) {
+            document.getElementById('multiplier-badge').innerText = multiplier + "x";
+        }
+        if (multiplier > 1.0 && document.getElementById('multiplier-reason')) {
+            document.getElementById('multiplier-reason').innerHTML = `Automatic 20% increase (Weight: ${w}kg).`;
+        }
+
+        if(titleElement) titleElement.innerHTML = `<i class="fas fa-utensils"></i> ${data.title}`;
+        
+        let accordionHtml = '';
+        let weekIndex = 0;
+
+        for (let week in data.weeks) {
+            let activeClass = (weekIndex === 0) ? 'active' : '';
+            accordionHtml += `
+                <div class="accordion-item ${activeClass}">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">
+                        <span>${week}</span>
+                    </div>
+                    <div class="accordion-content">
+                        <table>
+                            <thead><tr><th>Day</th><th>Breakfast</th><th>Lunch</th><th>Snack</th></tr></thead>
+                            <tbody>`;
+
+            data.weeks[week].forEach(day => {
+                let lunchText = day.lunch;
+                
+                if (multiplier > 1.0) {
+                    lunchText = lunchText.replace(/200g/g, "240g").replace(/130g/g, "156g").replace(/2 cup/g, "2.4 cup").replace(/1 cup/g, "1.2 cup");
+                }
+                accordionHtml += `<tr><td>${day.day}</td><td>${day.breakfast}</td><td>${lunchText}</td><td>${day.snack}</td></tr>`;
+            });
+
+            accordionHtml += `</tbody></table></div></div>`;
+            weekIndex++;
+        }
+        if(accordionContainer) accordionContainer.innerHTML = accordionHtml;
+    };
+</script>
+
+    <style>
+    .site-footer {
+        width: 100%;
+        padding: 32px 0;
+        border-top: 1px solid rgba(148, 163, 184, 0.25);
+        margin-top: 60px;
+        background: transparent;
+    }
+    .site-footer-inner { text-align: center; }
+    .site-footer-logo {
+        font-family: 'Sora', sans-serif;
+        font-size: 1.125rem;
+        font-weight: 800;
+        letter-spacing: -0.04em;
+        margin: 0 0 4px;
+        color: inherit;
+    }
+    .site-footer-logo span { color: #00d2ff; }
+    .site-footer-tagline {
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        color: #94a3b8;
+        margin: 0 0 16px;
+    }
+    .site-footer-copy {
+        font-size: 12px;
+        font-weight: 500;
+        color: #94a3b8;
+        margin: 0;
+    }
+    </style>
+
+    <footer class="site-footer">
+        <div class="site-footer-inner">
+            <h2 class="site-footer-logo">FORGE<span>.</span></h2>
+            <p class="site-footer-tagline">Intelligent Training System</p>
+            <p class="site-footer-copy">&copy; 2026 FORGE. All rights reserved.</p>
+        </div>
+    </footer>
+
+
+<script>
+
+(function(){
+  try {
+    var p = new URLSearchParams(window.location.search);
+    if (p.get('embed') !== '1') return;
+    function reportHeight(){
+      var h = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
+      parent.postMessage({ forgeMealHeight: h }, '*');
+    }
+    window.addEventListener('load', function(){ reportHeight(); setTimeout(reportHeight, 600); });
+    
+    document.addEventListener('click', function(){ setTimeout(reportHeight, 100); setTimeout(reportHeight, 650); });
+  } catch(e){}
+})();
+</script>
+</body>
+</html>

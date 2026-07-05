@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FORGE | Total Transformation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00d2ff;
+            --accent: #3a7bd5;
+            --darker: #070b14;
+            --card-bg: #0f1626;
+            --white: #ffffff;
+            --text-muted: #94a3b8;
+            --border: rgba(255,255,255,0.08);
+        }
+        body.light-mode {
+            --darker: #f0f2f5;
+            --card-bg: #ffffff;
+            --white: #1a1a1a;
+            --text-muted: #4b5563;
+            --border: #e2e8f0;
+        }
+        * { box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        h1, h2, h3, h4, .logo, .section-title { font-family: 'Sora', sans-serif; }
+        body {
+            margin: 0; padding: 0;
+            background-color: var(--darker);
+            color: var(--white);
+            transition: background-color 0.4s ease, color 0.4s ease;
+            min-height: 100vh;
+        }
+        .navbar {
+            position: fixed; top: 0; width: 100%; z-index: 1000;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 14px 6%;
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(15,23,42,0.08);
+            box-sizing: border-box;
+            transition: background 0.4s ease;
+        }
+        .logo { font-weight: 800; font-size: 1.5rem; letter-spacing: -0.04em; color: #0f172a; text-decoration: none; line-height: 1; }
+        .logo span { color: var(--primary); }
+        .nav-links { display: flex; align-items: center; gap: 26px; }
+        .nav-links a { color: #64748b; text-decoration: none; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; transition: color 0.25s ease; }
+        .nav-links a:hover { color: #0f172a; }
+        .nav-active { position: relative; color: #0f172a; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; cursor: default; }
+        .nav-active::after { content: ""; position: absolute; left: 0; right: 0; bottom: -7px; height: 2px; background: var(--primary); }
+        .mode-switch { width: 55px; height: 28px; background-color: #334155; border-radius: 50px; position: relative; cursor: pointer; margin-left: 25px; }
+        .switch-ball { width: 22px; height: 22px; background-color: white; border-radius: 50%; position: absolute; top: 3px; left: 3px; display: flex; align-items: center; justify-content: center; transition: 0.4s cubic-bezier(0.68,-0.55,0.265,1.55); font-size: 12px; }
+        body.light-mode .switch-ball { transform: translateX(27px); }
+        .hero { padding: 140px 6% 40px; text-align: center; max-width: 820px; margin: 0 auto; }
+        .badge { display: inline-block; background: rgba(0,210,255,0.15); color: var(--primary); font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; padding: 6px 14px; border-radius: 30px; margin-bottom: 18px; }
+        .hero h1 { font-size: 2.8rem; font-weight: 800; letter-spacing: -0.02em; line-height: 1.08; margin: 0 0 14px; }
+        .hero h1 span { color: var(--primary); }
+        .hero p { color: var(--text-muted); font-size: 1.05rem; line-height: 1.6; margin: 0 auto; max-width: 540px; }
+        .dash { max-width: 1100px; margin: 0 auto; padding: 20px 6% 60px; }
+        .profile-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 24px; padding: 32px; margin-bottom: 30px; }
+        .profile-card h3 { margin: 0 0 4px; font-size: 1.25rem; }
+        .profile-card .sub { color: var(--text-muted); font-size: 0.9rem; margin: 0 0 24px; }
+        .field-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; }
+        .field label { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 7px; }
+        .field input, .field select { width: 100%; padding: 13px 14px; border-radius: 12px; border: 1px solid var(--border); background: rgba(255,255,255,0.04); color: var(--white); font-size: 15px; outline: none; transition: border-color 0.2s; }
+        .field select option { background: #1e293b; color: #f1f5f9; }
+        body.light-mode .field select option { background: #ffffff; color: #0f172a; }
+        .field select { cursor: pointer; }
+
+        
+        .fdrop { position: relative; }
+        .fdrop-btn {
+            width: 100%; padding: 13px 14px; border-radius: 12px;
+            border: 1px solid var(--border); background: rgba(255,255,255,0.04);
+            color: var(--white); font-size: 15px; cursor: pointer; text-align: left;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        body.light-mode .fdrop-btn { background: #f8fafc; border: 1px solid #cbd5e1; color: #0f172a; }
+        .fdrop-btn .chev { transition: transform .2s ease; font-size: 11px; opacity: 0.6; }
+        .fdrop.open .fdrop-btn .chev { transform: rotate(180deg); }
+        .fdrop-menu {
+            position: absolute; top: calc(100% + 6px); left: 0; right: 0; z-index: 50;
+            background: #1e293b; border: 1px solid rgba(255,255,255,0.12); border-radius: 12px;
+            overflow: hidden; box-shadow: 0 12px 30px rgba(0,0,0,0.4); display: none;
+        }
+        body.light-mode .fdrop-menu { background: #ffffff; border: 1px solid #cbd5e1; box-shadow: 0 12px 30px rgba(0,0,0,0.12); }
+        .fdrop.open .fdrop-menu { display: block; }
+        .fdrop-opt { padding: 12px 14px; font-size: 14px; color: #e2e8f0; cursor: pointer; transition: background .15s ease; }
+        .fdrop-opt:hover, .fdrop-opt.sel { background: rgba(0,210,255,0.15); color: #fff; }
+        body.light-mode .fdrop-opt { color: #0f172a; }
+        body.light-mode .fdrop-opt:hover, body.light-mode .fdrop-opt.sel { background: rgba(0,210,255,0.15); color: #0f172a; }
+        body.light-mode .field input, body.light-mode .field select { background: #f8fafc; border: 1px solid #cbd5e1; color: #0f172a; }
+        .field input:focus, .field select:focus { border-color: var(--primary); }
+        .panels { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+        .panel { background: var(--card-bg); border: 1px solid var(--border); border-radius: 24px; padding: 32px; position: relative; overflow: hidden; }
+        .panel .icon { width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 26px; margin-bottom: 18px; }
+        .panel.nutrition .icon { background: rgba(0,210,255,0.15); }
+        .panel.training .icon { background: rgba(58,123,213,0.18); }
+        .panel h3 { margin: 0 0 8px; font-size: 1.4rem; }
+        .panel p { color: var(--text-muted); font-size: 0.95rem; line-height: 1.55; margin: 0 0 22px; min-height: 48px; }
+        .panel .extra { margin-bottom: 18px; }
+        .panel .extra label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); display: block; margin-bottom: 7px; }
+        .panel .extra select { width: 100%; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--border); background: rgba(255,255,255,0.04); color: var(--white); font-size: 14px; outline: none; }
+        body.light-mode .panel .extra select { background: #f8fafc; border: 1px solid #cbd5e1; color: #0f172a; }
+        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 15px; border-radius: 14px; border: none; font-weight: 800; font-size: 14px; letter-spacing: 0.04em; cursor: pointer; text-decoration: none; transition: transform 0.15s ease, opacity 0.2s ease; }
+        .btn:hover { transform: translateY(-2px); opacity: 0.92; }
+        .btn-nutrition { background: linear-gradient(135deg, var(--primary), var(--accent)); color: #fff; }
+        .btn-training { background: #1e293b; color: #fff; border: 1px solid var(--border); }
+        body.light-mode .btn-training { background: #0f172a; }
+        .both-btn-wrap { text-align: center; margin-top: 30px; }
+        .btn-both { display: inline-flex; align-items: center; gap: 10px; padding: 16px 40px; border-radius: 50px; border: none; background: var(--primary); color: #04222b; font-weight: 800; font-size: 15px; letter-spacing: 0.04em; cursor: pointer; transition: transform 0.15s, box-shadow 0.2s; }
+        .btn-both:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,210,255,0.3); }
+        .hint { text-align: center; color: var(--text-muted); font-size: 0.82rem; margin-top: 14px; }
+        .site-footer { width: 100%; padding: 32px 0; border-top: 1px solid rgba(148,163,184,0.25); margin-top: 40px; }
+        .site-footer-inner { text-align: center; }
+        .site-footer-logo { font-family: 'Sora', sans-serif; font-size: 1.125rem; font-weight: 800; letter-spacing: -0.04em; margin: 0 0 4px; color: inherit; }
+        .site-footer-logo span { color: var(--primary); }
+        .site-footer-tagline { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: #94a3b8; margin: 0 0 16px; }
+        .site-footer-copy { font-size: 12px; font-weight: 500; color: #94a3b8; margin: 0; }
+        @media (max-width: 600px) { .hero h1 { font-size: 2.1rem; } .nav-links { gap: 16px; } }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="Index.html" class="logo">FORGE<span>.</span></a>
+        <div class="nav-links">
+            <a href="Instopt.html">Nutrition</a>
+            <a href="gym-exercises.html">Training</a>
+            <span class="nav-active">Both</span>
+            <div class="mode-switch" onclick="toggleTheme()">
+                <div class="switch-ball"><span id="mode-icon">🌙</span></div>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <span class="badge">Total Transformation</span>
+        <h1>Train and Eat with <span>Precision.</span></h1>
+        <p>Enter your details once. We'll build your meal plan and your workout from the same profile — the complete FORGE system in one place.</p>
+    </header>
+
+    <main class="dash">
+        <div class="profile-card">
+            <h3>Your Profile</h3>
+            <p class="sub">Fill this in once — it powers both your nutrition and your training.</p>
+            <div class="field-grid">
+                <div class="field">
+                    <label>Gender</label>
+                    <input type="hidden" id="gender" value="male">
+                    <div class="fdrop" data-target="gender">
+                        <div class="fdrop-btn" onclick="toggleDrop(this)"><span class="fdrop-val">Male</span><span class="chev">▼</span></div>
+                        <div class="fdrop-menu">
+                            <div class="fdrop-opt sel" data-value="male" onclick="pickDrop(this)">Male</div>
+                            <div class="fdrop-opt" data-value="female" onclick="pickDrop(this)">Female</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="field">
+                    <label>Weight (kg)</label>
+                    <input type="number" id="weight" placeholder="e.g., 80">
+                </div>
+                <div class="field">
+                    <label>Height (cm)</label>
+                    <input type="number" id="height" placeholder="e.g., 182">
+                </div>
+                <div class="field">
+                    <label>Nutrition Plan</label>
+                    <input type="hidden" id="diet-plan" value="balanced">
+                    <div class="fdrop" data-target="diet-plan">
+                        <div class="fdrop-btn" onclick="toggleDrop(this)"><span class="fdrop-val">Standard / Balanced</span><span class="chev">▼</span></div>
+                        <div class="fdrop-menu">
+                            <div class="fdrop-opt sel" data-value="balanced" onclick="pickDrop(this)">Standard / Balanced</div>
+                            <div class="fdrop-opt" data-value="loss" onclick="pickDrop(this)">Weight Loss</div>
+                            <div class="fdrop-opt" data-value="mass" onclick="pickDrop(this)">Muscle Gain</div>
+                            <div class="fdrop-opt" data-value="vegan" onclick="pickDrop(this)">Vegan</div>
+                            <div class="fdrop-opt" data-value="vegetarian" onclick="pickDrop(this)">Vegetarian</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panels">
+            <div class="panel nutrition">
+                <div class="icon">🥗</div>
+                <h3>Nutrition Plan</h3>
+                <p>A personalized weekly meal plan based on the plan you picked above and your body metrics.</p>
+                <button class="btn btn-nutrition" onclick="goNutrition()">View My Meal Plan &rarr;</button>
+            </div>
+
+            <div class="panel training">
+                <div class="icon">💪</div>
+                <h3>Training Plan</h3>
+                <p>An interactive workout builder — tap muscles on the 3D map and generate routines.</p>
+                <div class="extra">
+                    <label>&nbsp;</label>
+                    <div style="font-size:0.85rem; color:var(--text-muted); padding:12px 0;">Your profile is sent straight to the body-map builder.</div>
+                </div>
+                <button class="btn btn-training" onclick="goTraining()">Open Workout Builder &rarr;</button>
+            </div>
+        </div>
+
+        <div class="both-btn-wrap">
+            <button class="btn-both" onclick="goBoth()">⚡ Save Profile &amp; Start Both</button>
+            <p class="hint">Saves your profile, opens your meal plan now, and your workout is ready in Training.</p>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="site-footer-inner">
+            <h2 class="site-footer-logo">FORGE<span>.</span></h2>
+            <p class="site-footer-tagline">Intelligent Training System</p>
+            <p class="site-footer-copy">&copy; 2026 FORGE. All rights reserved.</p>
+        </div>
+    </footer>
+
+<script>
+    function toggleTheme() {
+        const body = document.body;
+        const modeIcon = document.getElementById('mode-icon');
+        body.classList.toggle('light-mode');
+        const isLight = body.classList.contains('light-mode');
+        if (modeIcon) modeIcon.innerHTML = isLight ? "☀️" : "🌙";
+        try { localStorage.setItem('theme', isLight ? 'light' : 'dark'); } catch (e) {}
+    }
+    try {
+        if (localStorage.getItem('theme') === 'light') {
+            document.body.classList.add('light-mode');
+            var __mi = document.getElementById('mode-icon');
+            if (__mi) __mi.innerHTML = "☀️";
+        }
+    } catch (e) {}
+
+    
+    function toggleDrop(btn){
+        var drop = btn.parentElement;
+        var wasOpen = drop.classList.contains('open');
+        document.querySelectorAll('.fdrop.open').forEach(function(d){ d.classList.remove('open'); });
+        if (!wasOpen) drop.classList.add('open');
+    }
+    function pickDrop(opt){
+        var drop = opt.closest('.fdrop');
+        var target = drop.getAttribute('data-target');
+        var hidden = document.getElementById(target);
+        if (hidden) hidden.value = opt.getAttribute('data-value');
+        drop.querySelector('.fdrop-val').textContent = opt.textContent;
+        drop.querySelectorAll('.fdrop-opt').forEach(function(o){ o.classList.remove('sel'); });
+        opt.classList.add('sel');
+        drop.classList.remove('open');
+    }
+    document.addEventListener('click', function(e){
+        if (!e.target.closest('.fdrop')) {
+            document.querySelectorAll('.fdrop.open').forEach(function(d){ d.classList.remove('open'); });
+        }
+    });
+
+    function readProfile() {
+        const gender = document.getElementById('gender').value;
+        const w = document.getElementById('weight').value;
+        const h = document.getElementById('height').value;
+        const plan = document.getElementById('diet-plan').value; 
+        if (!w || !h) { alert("Please fill in your weight and height first!"); return null; }
+        return { gender, w, h, plan };
+    }
+
+    
+    function trainingGoal(plan) {
+        if (plan === 'loss') return 'burn';
+        return 'build'; 
+    }
+
+    function saveForTraining(p) {
+        try {
+            localStorage.setItem('orbit_gender', p.gender);
+            localStorage.setItem('orbit_weight', p.w);
+            localStorage.setItem('orbit_height', p.h);
+            localStorage.setItem('orbit_goal', trainingGoal(p.plan));
+        } catch (e) {}
+    }
+
+    function saveDietChoice(p) {
+        try { localStorage.setItem('forge_diet_url', nutritionUrl(p)); } catch (e) {}
+    }
+
+    function nutritionUrl(p) {
+        const base = `gender=${p.gender}&w=${p.w}&h=${p.h}`;
+        if (p.plan === 'vegan' || p.plan === 'vegetarian') {
+            return `vegan-veg-results.html?cat=${p.plan}&${base}&goal=classic`;
+        }
+        if (p.plan === 'loss') return `weight-loss.html?${base}`;
+        if (p.plan === 'mass') return `muscle-gain-results.html?${base}`;
+        return `diet-results.html?${base}`; 
+    }
+
+    function goNutrition() { const p = readProfile(); if (!p) return; saveForTraining(p); window.location.href = nutritionUrl(p); }
+    function goTraining()  { const p = readProfile(); if (!p) return; saveForTraining(p); window.location.href = 'gym-exercises.html'; }
+    function goBoth()      { const p = readProfile(); if (!p) return; saveForTraining(p); saveDietChoice(p); window.location.href = 'dashboard-results.html'; }
+</script>
+</body>
+</html>

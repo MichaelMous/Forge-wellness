@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DietPro | Scientific Nutrition</title>
+    <link rel="stylesheet" href="instport.css">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="Index.html" class="logo">FORGE<span>.</span></a>
+        <div class="nav-links">
+            <a href="#quiz-area">Quiz</a>
+            <a href="#goals-area">Goals</a>
+            <span class="nav-active">Nutrition</span>
+            <a href="gym-exercises.html">Training</a>
+            <div class="mode-switch" onclick="toggleTheme()">
+                <div class="switch-ball">
+                    <span id="mode-icon">🌙</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="hero-container" id="hero-section">
+        <div class="hero-image-section">
+            <div class="overlay"></div>
+            <img src="Images/veg.jpg" alt="Healthy Nutrition" id="main-photo">
+        </div>
+        <div class="hero-content-section">
+            <div class="plate-background">
+                <img src="Images/download2.png" alt="Rotating Plate" class="rotating-plate">
+            </div>
+            <div class="top-content">
+                <span class="badge">Professional Nutrition Guide</span>
+                <h1>Transform Your Body <br><span class="highlight">with Precision.</span></h1>
+                <p class="hero-description">Forget generic diets. We use your data to create the perfect plan.</p>
+                <a href="#quiz-area" class="btn-primary">Get Started Now</a>
+            </div>
+        </div>
+    </main>
+
+    <section class="quiz-section" id="quiz-area">
+        <div class="quiz-flex">
+            <div class="quiz-card quiz-box">
+                <h3>Calculate Your Plan</h3>
+                
+                <div class="input-group">
+                    <label>Gender</label>
+                    <select id="gender">
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Weight (kg)</label>
+                    <input type="number" id="weight" placeholder="e.g., 75">
+                </div>
+                <div class="input-group">
+                    <label>Height (cm)</label>
+                    <input type="number" id="height" placeholder="e.g., 180">
+                </div>
+                <button onclick="calculateAndRedirect()" class="btn-quiz">Next Step</button>
+            </div>
+            
+            <div class="quiz-card quiz-info">
+                <h2>Your First <span class="highlight">Healthy Diet</span></h2>
+                <p>This is a nutrition plan based on healthy frameworks to maintain your long-term well-being.</p>
+                <div class="info-note">
+                    <strong>Note:</strong> This plan is customized and tailored specifically to your metrics.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="goals-section" id="goals-area">
+        <h2 class="section-title">Choose Your <span class="highlight">Goal</span></h2>
+        <div class="goals-grid">
+            <div class="goal-card" id="weight-loss-card" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=500');">
+                <div class="card-content">
+                    <h3>Weight Loss</h3>
+                    <p>Burn fat and improve your overall physical fitness levels.</p>
+                    <button class="goal-btn" onclick="openStandardModal('loss')">Select</button>
+                </div>
+            </div>
+
+            <div class="goal-card" id="muscle-gain-card" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=500');">
+                <div class="card-content">
+                    <h3>Muscle Gain</h3>
+                    <p>Strengthen your physique with targeted nutritional fuel.</p>
+                    <button class="goal-btn" onclick="openStandardModal('mass')">Select</button>
+                </div>
+            </div>
+
+            <div class="goal-card" id="vegan-card" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=500');">
+                <div class="leaves-container"></div>
+                <div class="card-content">
+                    <h3>Vegan / Vegetarian</h3>
+                    <p>Healthy, clean plant-based choices packed with vital energy.</p>
+                    <button class="goal-btn" onclick="openPlantModal()">Select</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+    <div id="data-modal" class="modal-overlay">
+        <div class="modal-card">
+            <h2 class="modal-title">Personalization</h2>
+            <p class="modal-subtitle">Fill in your metrics to unlock your plan.</p>
+            
+            <select id="modal-gender" class="styled-select">
+                <option value="" disabled selected>Select Gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+            </select>
+            
+            <input type="number" id="modal-weight" placeholder="Weight (kg)" class="styled-select">
+            <input type="number" id="modal-height" placeholder="Height (cm)" class="styled-select">
+            
+            <button onclick="submitData()" class="primary-btn">View Program</button>
+            <button onclick="closeModal()" class="secondary-btn">Cancel</button>
+        </div>
+    </div>
+
+    
+    <div id="plant-modal" class="modal-overlay">
+        <div class="modal-card" style="border-color: #22c55e;">
+            <h2 class="modal-title">Personalize <span style="color: #22c55e;">Plant-Based</span></h2>
+            <p class="modal-subtitle">Complete your details to build your customized routine.</p>
+            
+            <select id="plant-gender" class="styled-select" style="margin-top:15px;">
+                <option value="" disabled selected>1. Select Gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+            </select>
+            
+            <select id="plant-cat" class="styled-select" style="margin-top:15px;">
+                <option value="" disabled selected>2. Diet Type</option>
+                <option value="vegan">Vegan (Strictly Plant-Based)</option>
+                <option value="vegetarian">Vegetarian (Lacto-Ovo)</option>
+            </select>
+            
+            <select id="plant-goal" class="styled-select" style="margin-top:15px;">
+                <option value="" disabled selected>3. Select Goal</option>
+                <option value="loss">Weight Loss (Reduced quantities)</option>
+                <option value="mass">Muscle Gain (Increased quantities)</option>
+                <option value="classic">Classic Diet (Stable quantities)</option>
+            </select>
+            
+            <input type="number" id="plant-weight" placeholder="4. Weight (kg)" class="styled-select" style="margin-top:15px;">
+            <input type="number" id="plant-height" placeholder="5. Height (cm)" class="styled-select" style="margin-top:15px;">
+            
+            <button onclick="submitPlantDataForm()" class="primary-btn" style="background:#22c55e; border-color:#22c55e; margin-top:20px;">View Program</button>
+            <button onclick="closePlantModal()" class="secondary-btn">Cancel</button>
+        </div>
+    </div>
+
+<script>
+function submitPlantDataForm() {
+    const gender = document.getElementById('plant-gender').value;
+    const cat = document.getElementById('plant-cat').value;
+    const goal = document.getElementById('plant-goal').value;
+    const w = document.getElementById('plant-weight').value;
+    const h = document.getElementById('plant-height').value;
+    
+    if(!gender || !cat || !goal || !w || !h) {
+        alert("Please fill in all the fields in the form!");
+        return;
+    }
+    
+    window.location.href = `vegan-veg-results.html?gender=${gender}&cat=${cat}&goal=${goal}&w=${w}&h=${h}`;
+}
+
+function closePlantModal() {
+    document.getElementById('plant-modal').style.display = 'none';
+}
+</script>
+
+    <script src="insport.js"></script>
+
+    <style>
+    .site-footer {
+        width: 100%;
+        padding: 32px 0;
+        border-top: 1px solid rgba(148, 163, 184, 0.25);
+        margin-top: 60px;
+        background: transparent;
+    }
+    .site-footer-inner { text-align: center; }
+    .site-footer-logo {
+        font-family: 'Sora', sans-serif;
+        font-size: 1.125rem;
+        font-weight: 800;
+        letter-spacing: -0.04em;
+        margin: 0 0 4px;
+        color: inherit;
+    }
+    .site-footer-logo span { color: #00d2ff; }
+    .site-footer-tagline {
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        color: #94a3b8;
+        margin: 0 0 16px;
+    }
+    .site-footer-copy {
+        font-size: 12px;
+        font-weight: 500;
+        color: #94a3b8;
+        margin: 0;
+    }
+    </style>
+
+    <footer class="site-footer">
+        <div class="site-footer-inner">
+            <h2 class="site-footer-logo">FORGE<span>.</span></h2>
+            <p class="site-footer-tagline">Intelligent Training System</p>
+            <p class="site-footer-copy">&copy; 2026 FORGE. All rights reserved.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
